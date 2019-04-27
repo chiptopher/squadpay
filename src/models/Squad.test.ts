@@ -1,6 +1,5 @@
 import {Member} from "./Member";
 import {Squad} from "./Squad";
-import {Simulate} from "react-dom/test-utils";
 
 function createMember(name: string, contribution: number): Member {
     return {name, contribution}
