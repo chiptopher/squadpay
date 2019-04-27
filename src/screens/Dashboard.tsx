@@ -1,22 +1,26 @@
 import * as React from "react";
-import {SquadMate} from "../models/SquadMate";
+import {Squad} from "../models/Squad";
+import {Member} from "../models/Member";
+import {AddMember} from "../components/AddMember";
 
 export interface Props {
 
 }
 
 interface State {
-    squadMates: SquadMate[];
+    squad: Squad;
     currentInput: string;
+    addingMember: boolean;
 }
 
 export class Dashboard extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            squadMates: [],
-            currentInput: ''
-        }
+            squad: new Squad(),
+            currentInput: '',
+            addingMember: false
+        };
 
         this.addSquadMate = this.addSquadMate.bind(this);
     }
@@ -25,46 +29,25 @@ export class Dashboard extends React.Component<Props, State> {
     render() {
         return <div>
             <h1>Squad Mates</h1>
-            <input
-                id={'squadMateInput'}
-                type={'text'}
-                value={this.state.currentInput}
-                onChange={(event: any) => {
-                    this.setState({
-                        currentInput: event.target.value
-                    });
-                }}
-            />
-            <button
-                id={'squadMateButton'}
-                onClick={(event) => {
-                    const currentSquadMates = this.state.squadMates;
-                    currentSquadMates.push({
-                        name: this.state.currentInput,
-                        amountSpent: 0,
-                        amountContributed: 0
-                    });
-                    this.setState({
-                        squadMates: currentSquadMates,
-                        currentInput: ''
-                    })
-                }}>
-                Add Squad Mate
-            </button>
             <div>{
-                this.state.squadMates.map(this.addSquadMate)
+                this.state.squad.squadMembers.map(this.addSquadMate)
             }
             </div>
+            <AddMember onMemberSubmit={(member) => {
+                const squad = this.state.squad;
+                squad.addSquadMember(member);
+                this.setState({
+                    addingMember: false,
+                    squad: squad
+                })
+            }}/>
         </div>;
     }
 
-    addSquadMate(squadMate: SquadMate) {
+    addSquadMate(squadMate: Member) {
         return <div key={squadMate.name}>
             <div>
-                {squadMate.name}
-            </div>
-            <div>
-                <span>Amount Paid</span><input/>
+                {squadMate.name} contributed ${squadMate.contribution.toFixed(2)}
             </div>
         </div>;
     }

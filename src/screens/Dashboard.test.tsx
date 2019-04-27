@@ -8,28 +8,41 @@ describe('Dashboard', () => {
         return mount(<Dashboard/>);
     }
 
-    function addSquadMate(subject: any, squadMateName: string) {
-        const addSquadMemberInput = subject.find('#squadMateInput');
-        addSquadMemberInput.simulate('change', {target: {value: squadMateName}});
+    function addSquadMate(subject: any, squadMateName: string, contribution: number) {
 
-        const addSquadMateButton = subject.find('#squadMateButton');
-        addSquadMateButton.simulate('click');
+        const plusButton = subject.find("#squadMemberAddActivate");
+        plusButton.simulate("click");
+
+        subject.update();
+
+        const newMemberNameInput = subject.find("#squadMemberAddName");
+        newMemberNameInput.simulate('change', {target: {value: squadMateName}});
+
+        const newMemberContributionInput = subject.find("#squadMemberAddContribution");
+        newMemberContributionInput.simulate('change', {target: {value: contribution}});
+
+        subject.update();
+
+        const newPlusButton = subject.find("#squadMemberAddActivate");
+        newPlusButton.simulate("click");
+
+        let update = subject.update();
+
+        return update;
     }
 
     describe('Adding a squad member', () => {
         it('should display them in the squad list', () => {
-
-            const subject = mountScreen();
-            addSquadMate(subject, 'Squad Mate 1');
-
+            const subject = addSquadMate(mountScreen(), 'Squad Mate 1', 100);
             expect(subject.text()).toContain('Squad Mate 1');
         });
-        it('should clear the input when hitting enter', () => {
-
-            const subject = mountScreen();
-            addSquadMate(subject, 'Squad Mate 1');
-
-            expect(subject.find('#squadMateInput').props().value).toEqual('');
+        it("should display their contribution amount", () => {
+            const subject = addSquadMate(mountScreen(), "Squad Mate 1", 100);
+            expect(subject.text()).toContain("Squad Mate 1 contributed $100.00");
+        });
+        it("adding a member should hide the input", () => {
+            const subject = addSquadMate(mountScreen(), 'Squad Mate 1', 100);
+            expect(subject.find("#squadMemberAddName")).toHaveLength(0);
         });
     });
 });
