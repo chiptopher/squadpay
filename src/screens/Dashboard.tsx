@@ -2,6 +2,7 @@ import * as React from "react";
 import {Squad} from "../models/Squad";
 import {Member} from "../models/Member";
 import {AddMember} from "../components/AddMember";
+import {MemberListElement} from "../components/MemberListElement";
 
 export interface Props {
 
@@ -10,7 +11,6 @@ export interface Props {
 interface State {
     squad: Squad;
     currentInput: string;
-    addingMember: boolean;
 }
 
 export class Dashboard extends React.Component<Props, State> {
@@ -19,36 +19,30 @@ export class Dashboard extends React.Component<Props, State> {
         this.state = {
             squad: new Squad(),
             currentInput: '',
-            addingMember: false
         };
-
-        this.addSquadMate = this.addSquadMate.bind(this);
     }
 
 
     render() {
         return <div>
             <h1>Squad Mates</h1>
-            <div>{
-                this.state.squad.squadMembers.map(this.addSquadMate)
-            }
+            <div>
+                Trip Cost: ${this.state.squad.costOfTrip().toFixed(2)}
+            </div>
+            <div>
+                {
+                    this.state.squad.squadMembers.map((member) => {
+                        return <MemberListElement key={member.name} member={member}/>
+                    })
+                }
             </div>
             <AddMember onMemberSubmit={(member) => {
                 const squad = this.state.squad;
                 squad.addSquadMember(member);
                 this.setState({
-                    addingMember: false,
                     squad: squad
                 })
             }}/>
-        </div>;
-    }
-
-    addSquadMate(squadMate: Member) {
-        return <div key={squadMate.name}>
-            <div>
-                {squadMate.name} contributed ${squadMate.contribution.toFixed(2)}
-            </div>
         </div>;
     }
 }

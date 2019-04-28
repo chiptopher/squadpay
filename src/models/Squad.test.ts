@@ -33,6 +33,10 @@ describe("Member", () => {
             squad.addSquadMember(member2);
             expect(squad.costOfTrip()).toEqual(50.0);
         });
+        it("should result in zero when there are no members", () => {
+            const squad = new Squad();
+            expect(squad.costOfTrip()).toEqual(0);
+        });
     });
     describe("getDebtOfMemberToMember", () => {
         describe("when there are two members that paid different ammounts", () => {

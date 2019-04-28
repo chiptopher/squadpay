@@ -44,5 +44,9 @@ describe('Dashboard', () => {
             const subject = addSquadMate(mountScreen(), 'Squad Mate 1', 100);
             expect(subject.find("#squadMemberAddName")).toHaveLength(0);
         });
+        it("should show the cost of the trip on the page", () => {
+            const subject = addSquadMate(mountScreen(), "Squad Mate 1", 100.0);
+            expect(subject.text()).toContain("Trip Cost: $100.00");
+        })
     });
 });

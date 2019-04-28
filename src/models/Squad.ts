@@ -12,6 +12,9 @@ export class Squad {
     }
 
     costOfTrip(): number {
+        if (this.squadMembers.length === 0) {
+            return 0;
+        }
         return this.squadMembers.reduce((prev, current) => {
             return {
                 name: "",
