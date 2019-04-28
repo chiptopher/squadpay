@@ -34,9 +34,10 @@ export class MemberListElement extends React.Component<Props, State> {
                 this.state.toggled && <div>
                     {this.otherSquadMembers().map((member: Member, index) => {
                         const owedAmount = this.props.squad.debtOfMemberToMember(member, this.props.member);
-                        return <div style={styles.debtorsContainer} key={index}>
-                            owed from {member.name}: {money(owedAmount)}
-                        </div>
+                        const text = owedAmount > 0 ?
+                            `owed from ${member.name}: ${money(owedAmount)}`:
+                            `owed to ${member.name}: ${money(-1 * owedAmount)}`;
+                        return <div style={styles.debtorsContainer} key={index}>{text}</div>
                     })}
                 </div>
             }

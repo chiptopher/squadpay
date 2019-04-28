@@ -69,5 +69,16 @@ describe('Dashboard', () => {
             subject.update();
             expect(subject.text()).not.toContain("Squad Mate 1: $0.00")
         });
-    })
+        it("should denote whether a member 'owes to' another member when they're in debt", () => {
+            let subject = addSquadMate(mountScreen(), "Squad Mate 1", 90.0);
+            subject = addSquadMate(subject, "Squad Mate 2", 10.0);
+
+            const member1Toggle = subject.find("#Squad-Mate-2");
+            member1Toggle.simulate("click");
+
+            subject.update();
+
+            expect(subject.text()).toContain("owed to Squad Mate 1: $40.00");
+        });
+    });
 });
