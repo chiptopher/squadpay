@@ -1,5 +1,7 @@
 import * as React from "react";
 import {Member} from "../models/Member";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCheck, faPlus} from "@fortawesome/free-solid-svg-icons";
 
 
 interface Props {
@@ -41,13 +43,16 @@ export class AddMember extends React.Component<Props, State> {
         }
         return <div style={styles.container}>
             <div>
-                <button id={"squadMemberAddActivate"}
+                <button style={this.state.addingMember ? styles.confirmButton : styles.defaultButton}
+                        id={"squadMemberAddActivate"}
                         onClick={buttonBehavior}>
-                    +
+                    {this.state.addingMember ?
+                        <FontAwesomeIcon icon={faCheck}/> :
+                        <FontAwesomeIcon icon={faPlus}/>}
                 </button>
             </div>
             {
-                this.state.addingMember && <div>
+                this.state.addingMember && <div style={{display: "flex"}}>
                     <input
                         id={'squadMemberAddName'}
                         type={'text'}
@@ -58,7 +63,10 @@ export class AddMember extends React.Component<Props, State> {
                             });
                         }}
                     />
-                    contributed $
+                    <span style={{paddingLeft: 5, paddingRight: 12}}>
+                        contributed
+                    </span>
+                    <span>$</span>
                     <input
                         id={'squadMemberAddContribution'}
                         type={'text'}
@@ -77,6 +85,29 @@ export class AddMember extends React.Component<Props, State> {
 
 const styles = {
     container: {
-        display: "flex"
+        display: "flex",
+        alignItems: "center" as "center"
+    },
+    defaultButton: {
+        backgroundColor: "#f1c40f",
+        padding: 3,
+        fontSize: 24,
+        borderRadius: 5,
+        width: 64,
+        textDecoration: "none",
+        color: "#fff",
+        boxShadow: "0px 5px 0px 0px #d8af0a",
+        borderStyle: "none"
+    },
+    confirmButton: {
+        backgroundColor: "#2ecc71",
+        padding: 3,
+        fontSize: 24,
+        borderRadius: 5,
+        width: 64,
+        textDecoration: "none",
+        color: "#fff",
+        boxShadow: "0px 5px 0px 0px #25a85b",
+        borderStyle: "none"
     }
 };
