@@ -2,6 +2,8 @@ import * as React from "react";
 import {Member} from "../models/Member";
 import {Squad} from "../models/Squad";
 import {money} from "../util/money";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faAngleDown, faAngleRight} from "@fortawesome/free-solid-svg-icons";
 
 
 interface Props {
@@ -25,17 +27,29 @@ export class MemberListElement extends React.Component<Props, State> {
     render() {
         return <div>
             <div id={this.props.member.name.replace(/\s+/g, "-")}
-                 onClick={() => {this.setState({
-                     toggled: !this.state.toggled
-                 })}}>
-                {this.props.member.name} contributed ${this.props.member.contribution.toFixed(2)}
+                 onClick={() => {
+                     this.setState({
+                         toggled: !this.state.toggled
+                     })
+                 }}>
+                <div style={styles.header}>
+                    <div style={styles.toggleIndicator}>
+                        {this.state.toggled ?
+                            <FontAwesomeIcon icon={faAngleDown}/> :
+                            <FontAwesomeIcon icon={faAngleRight}/>
+                        }
+                    </div>
+                    <div>
+                        {this.props.member.name} contributed ${this.props.member.contribution.toFixed(2)}
+                    </div>
+                </div>
             </div>
             {
                 this.state.toggled && <div>
                     {this.otherSquadMembers().map((member: Member, index) => {
                         const owedAmount = this.props.squad.debtOfMemberToMember(member, this.props.member);
                         const text = owedAmount > 0 ?
-                            `owed from ${member.name}: ${money(owedAmount)}`:
+                            `owed from ${member.name}: ${money(owedAmount)}` :
                             `owed to ${member.name}: ${money(-1 * owedAmount)}`;
                         return <div style={styles.debtorsContainer} key={index}>{text}</div>
                     })}
@@ -52,7 +66,18 @@ export class MemberListElement extends React.Component<Props, State> {
 }
 
 const styles = {
+    header: {
+        display: "flex",
+    },
     debtorsContainer: {
-        paddingLeft: 10
+        paddingLeft: 44
+    },
+    toggleIndicator: {
+        width: 24,
+        paddingRight: 10,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center" as "center"
+
     }
 }
