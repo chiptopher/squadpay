@@ -35,13 +35,6 @@ export class Dashboard extends React.Component<Props, State> {
                     <span style={styles.costOfTripText}>Trip Cost:</span>
                     <span style={styles.costOfTripMoney}>{money(this.state.squad.costOfTrip())}</span>
                 </div>
-                <div>
-                    {
-                        this.state.squad.squadMembers.map((member) => {
-                            return <MemberListElement key={member.name} member={member} squad={this.state.squad}/>
-                        })
-                    }
-                </div>
                 <div style={styles.addMember}>
                     <AddMember onMemberSubmit={(member) => {
                         const squad = this.state.squad;
@@ -50,6 +43,13 @@ export class Dashboard extends React.Component<Props, State> {
                             squad: squad
                         })
                     }}/>
+                </div>
+                <div>
+                    {
+                        this.state.squad.squadMembers.map((member) => {
+                            return <MemberListElement key={member.name} member={member} squad={this.state.squad}/>
+                        })
+                    }
                 </div>
             </div>
         </div>;
