@@ -38,7 +38,7 @@ describe('Dashboard', () => {
         });
         it("should display their contribution amount", () => {
             const subject = addSquadMate(mountScreen(), "Squad Mate 1", 100);
-            expect(subject.text()).toContain("Squad Mate 1 contributed $100.00");
+            expect(subject.text()).toContain("Squad Mate 1: $100.00");
         });
         it("adding a member should hide the input", () => {
             const subject = addSquadMate(mountScreen(), 'Squad Mate 1', 100);
@@ -46,7 +46,7 @@ describe('Dashboard', () => {
         });
         it("should show the cost of the trip on the page", () => {
             const subject = addSquadMate(mountScreen(), "Squad Mate 1", 100.0);
-            expect(subject.text()).toContain("Trip Cost: $100.00");
+            expect(subject.text()).toContain("Trip Cost:$100.00");
         })
     });
 

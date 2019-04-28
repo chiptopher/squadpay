@@ -12,6 +12,7 @@ export interface Props {
 interface State {
     squad: Squad;
     currentInput: string;
+    width: number;
 }
 
 export class Dashboard extends React.Component<Props, State> {
@@ -20,17 +21,36 @@ export class Dashboard extends React.Component<Props, State> {
         this.state = {
             squad: new Squad(),
             currentInput: '',
+            width: window.innerWidth
         };
+        this.generateContainerStyle = this.generateContainerStyle.bind(this);
     }
 
+    componentWillMount() {
+        window.addEventListener('resize', this.handleWindowSizeChange);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleWindowSizeChange);
+    }
+
+    handleWindowSizeChange = () => {
+        this.setState({width: window.innerWidth});
+    };
+
+    generateContainerStyle() {
+        const isMobile = this.state.width <= 500;
+        let finalStyle = isMobile ? {...styles.squadContainer, ...{width: "100%"}} : styles.squadContainer;
+        return finalStyle
+    }
 
     render() {
         return <div style={styles.container}>
             <div style={styles.title}>
-                <span style={styles.titleSquad}>app</span>
-                <span style={styles.titlePay}>doodad</span>
+                <span style={styles.titleSquad}>squad</span>
+                <span style={styles.titlePay}>pay</span>
             </div>
-            <div style={styles.squadContainer}>
+            <div style={this.generateContainerStyle()}>
                 <div style={styles.costOfTrip}>
                     <span style={styles.costOfTripText}>Trip Cost:</span>
                     <span style={styles.costOfTripMoney}>{money(this.state.squad.costOfTrip())}</span>
@@ -44,10 +64,12 @@ export class Dashboard extends React.Component<Props, State> {
                         })
                     }}/>
                 </div>
-                <div>
+                <div style={styles.membersContainer}>
                     {
                         this.state.squad.squadMembers.map((member) => {
-                            return <MemberListElement key={member.name} member={member} squad={this.state.squad}/>
+                            return <div key={member.name} style={styles.member}>
+                                <MemberListElement member={member} squad={this.state.squad}/>
+                            </div>
                         })
                     }
                 </div>
@@ -75,7 +97,8 @@ const styles = {
         color: "#f1c40f"
     },
     squadContainer: {
-        width: "60%"
+        width: "40%",
+        height: "100%",
     },
     costOfTrip: {
         fontSize: 24,
@@ -91,7 +114,14 @@ const styles = {
         paddingLeft: 15
     },
     addMember: {
+        width: "100%",
         marginTop: 10,
         marginBottom: 10
+    },
+    membersContainer: {
+        paddingTop: 30,
+    },
+    member: {
+        marginBottom: 15
     }
 };

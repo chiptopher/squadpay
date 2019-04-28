@@ -40,7 +40,7 @@ export class MemberListElement extends React.Component<Props, State> {
                         }
                     </div>
                     <div>
-                        {this.props.member.name} contributed ${this.props.member.contribution.toFixed(2)}
+                        {this.props.member.name}: {money(this.props.member.contribution)}
                     </div>
                 </div>
             </div>

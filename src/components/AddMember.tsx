@@ -42,7 +42,7 @@ export class AddMember extends React.Component<Props, State> {
             })
         }
         return <div style={styles.container}>
-            <div>
+            <div style={{width: "100%"}}>
                 <button style={this.state.addingMember ? styles.confirmButton : styles.defaultButton}
                         id={"squadMemberAddActivate"}
                         onClick={buttonBehavior}>
@@ -52,31 +52,35 @@ export class AddMember extends React.Component<Props, State> {
                 </button>
             </div>
             {
-                this.state.addingMember && <div style={{display: "flex"}}>
-                    <input
-                        id={'squadMemberAddName'}
-                        type={'text'}
-                        value={this.state.nameInput}
-                        onChange={(event: any) => {
-                            this.setState({
-                                nameInput: event.target.value
-                            });
-                        }}
-                    />
-                    <span style={{paddingLeft: 5, paddingRight: 12}}>
-                        contributed
-                    </span>
-                    <span>$</span>
-                    <input
-                        id={'squadMemberAddContribution'}
-                        type={'text'}
-                        value={this.state.contributionInput}
-                        onChange={(event: any) => {
-                            this.setState({
-                                contributionInput: event.target.value
-                            });
-                        }}
-                    />
+                this.state.addingMember && <div style={styles.addMemberInfoContainer}>
+                    <div>
+                        <div style={styles.label}>Name</div>
+                        <input
+                            id={'squadMemberAddName'}
+                            type={'text'}
+                            value={this.state.nameInput}
+                            style={styles.input}
+                            onChange={(event: any) => {
+                                this.setState({
+                                    nameInput: event.target.value
+                                });
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <div style={styles.label}>Amount Contributed</div>
+                        <input
+                            id={'squadMemberAddContribution'}
+                            type={'text'}
+                            value={this.state.contributionInput}
+                            style={styles.input}
+                            onChange={(event: any) => {
+                                this.setState({
+                                    contributionInput: event.target.value
+                                });
+                            }}
+                        />
+                    </div>
                 </div>
             }
         </div>
@@ -86,14 +90,14 @@ export class AddMember extends React.Component<Props, State> {
 const styles = {
     container: {
         display: "flex",
+        flexDirection: "column" as "column",
         alignItems: "center" as "center"
     },
     defaultButton: {
         backgroundColor: "#f1c40f",
-        padding: 3,
         fontSize: 24,
         borderRadius: 5,
-        width: 64,
+        width: "100%",
         textDecoration: "none",
         color: "#fff",
         boxShadow: "0px 5px 0px 0px #d8af0a",
@@ -101,13 +105,26 @@ const styles = {
     },
     confirmButton: {
         backgroundColor: "#2ecc71",
-        padding: 3,
         fontSize: 24,
         borderRadius: 5,
-        width: 64,
+        width: "100%",
         textDecoration: "none",
         color: "#fff",
         boxShadow: "0px 5px 0px 0px #25a85b",
         borderStyle: "none"
+    },
+    addMemberInfoContainer: {
+        display: "flex",
+        flexDirection: "column" as "column",
+        width: "100%",
+        marginTop: 10,
+        marginBottom: 10
+    },
+    label: {
+        color: "#a5aeb7"
+    },
+    input: {
+        width: "100%",
+        boxSizing: "border-box" as "border-box"
     }
 };

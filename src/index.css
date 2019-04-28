@@ -6,6 +6,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  font-size: 18px;
+  color: #34495e;
+  font-weight: 500;
 }
 
 code {
@@ -13,8 +17,7 @@ code {
     monospace;
 }
 
-body {
-  font-size: 24px;
-  color: #34495e;
-  font-weight: 500;
+html {
+  padding: 0;
+  margin: 0;
 }
