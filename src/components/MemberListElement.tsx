@@ -19,6 +19,7 @@ export class MemberListElement extends React.Component<Props, State> {
         this.state = {
             toggled: false
         }
+        this.otherSquadMembers = this.otherSquadMembers.bind(this);
     }
 
     render() {
@@ -31,7 +32,7 @@ export class MemberListElement extends React.Component<Props, State> {
             </div>
             {
                 this.state.toggled && <div>
-                    {this.props.squad.squadMembers.map((member: Member, index) => {
+                    {this.otherSquadMembers().map((member: Member, index) => {
                         const owedAmount = this.props.squad.debtOfMemberToMember(member, this.props.member);
                         return <div style={styles.debtorsContainer} key={index}>
                             owed from {member.name}: {money(owedAmount)}
@@ -42,6 +43,11 @@ export class MemberListElement extends React.Component<Props, State> {
         </div>
     }
 
+    otherSquadMembers(): Member[] {
+        return this.props.squad.squadMembers.filter((member: Member) => {
+            return member !== this.props.member;
+        });
+    }
 }
 
 const styles = {

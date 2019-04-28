@@ -62,5 +62,12 @@ describe('Dashboard', () => {
 
             expect(subject.text()).toContain("owed from Squad Mate 2: $40.00");
         });
+        it("should not show a member's debt to themselves", () => {
+            const subject = addSquadMate(mountScreen(), "Squad Mate 1", 100.0);
+            const memberToggle = subject.find("#Squad-Mate-1");
+            memberToggle.simulate("click");
+            subject.update();
+            expect(subject.text()).not.toContain("Squad Mate 1: $0.00")
+        });
     })
 });
