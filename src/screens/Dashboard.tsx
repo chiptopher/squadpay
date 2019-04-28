@@ -4,6 +4,7 @@ import {Member} from "../models/Member";
 import {AddMember} from "../components/AddMember";
 import {MemberListElement} from "../components/MemberListElement";
 import {money} from "../util/money";
+import logo from "../logo.png"
 
 export interface Props {
 
@@ -47,6 +48,7 @@ export class Dashboard extends React.Component<Props, State> {
     render() {
         return <div style={styles.container}>
             <div style={styles.title}>
+                <img style={styles.logo} src={logo}/>
                 <span style={styles.titleSquad}>squad</span>
                 <span style={styles.titlePay}>pay</span>
             </div>
@@ -79,6 +81,11 @@ export class Dashboard extends React.Component<Props, State> {
 }
 
 const styles = {
+    logo: {
+        height: 64,
+        width: "auto" as "auto",
+        margin: 10
+    },
     container: {
         display: "flex",
         flexDirection: "column" as "column",
@@ -86,6 +93,8 @@ const styles = {
         padding: 20
     },
     title: {
+        display: "flex",
+        alignItems: "center" as "center",
         fontWeight: 700,
         fontSize: 64,
         marginBottom: 50,
