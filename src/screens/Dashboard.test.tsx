@@ -49,4 +49,18 @@ describe('Dashboard', () => {
             expect(subject.text()).toContain("Trip Cost: $100.00");
         })
     });
+
+    describe("Toggling a Squad Member", () => {
+        it("should show how much that member is owed by people that underpaid", () => {
+            let subject = addSquadMate(mountScreen(), "Squad Mate 1", 90.0);
+            subject = addSquadMate(subject, "Squad Mate 2", 10.0);
+
+            const member1Toggle = subject.find("#Squad-Mate-1");
+            member1Toggle.simulate("click");
+
+            subject.update();
+
+            expect(subject.text()).toContain("owed from Squad Mate 2: $40.00");
+        });
+    })
 });

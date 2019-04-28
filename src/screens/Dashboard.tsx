@@ -32,7 +32,7 @@ export class Dashboard extends React.Component<Props, State> {
             <div>
                 {
                     this.state.squad.squadMembers.map((member) => {
-                        return <MemberListElement key={member.name} member={member}/>
+                        return <MemberListElement key={member.name} member={member} squad={this.state.squad}/>
                     })
                 }
             </div>
