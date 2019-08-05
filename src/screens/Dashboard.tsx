@@ -48,7 +48,7 @@ export class Dashboard extends React.Component<Props, State> {
     }
 
     render() {
-        return <div className={"container"}>
+        return <div className={"Dashboard"}>
             <div className={"title"}>
                 <img className={"logo"} src={logo}/>
                 <span className={"titleSquad"}>squad</span>
