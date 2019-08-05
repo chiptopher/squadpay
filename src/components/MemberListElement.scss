@@ -1,0 +1,19 @@
+.MemberListElement {
+
+  .memberHeader {
+    display: flex;
+
+    .toggleIndicator {
+      width: 24px;
+      padding-right: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .debtorsContainer {
+    padding-left: 44px;
+  }
+
+}
