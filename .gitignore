@@ -116,6 +116,7 @@ modules.xml
 ### Sass ###
 .sass-cache/
 *.css.map
+*.css
 *.sass.map
 *.scss.map
 
