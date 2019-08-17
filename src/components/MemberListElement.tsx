@@ -34,28 +34,11 @@ export class MemberListElement extends React.Component<Props, State> {
                      })
                  }}>
                 <div className={"memberHeader"}>
-                    <div className={"toggleIndicator"}>
-                        {this.state.toggled ?
-                            <FontAwesomeIcon icon={faAngleDown}/> :
-                            <FontAwesomeIcon icon={faAngleRight}/>
-                        }
-                    </div>
                     <div>
-                        {this.props.member.name}: {money(this.props.member.contribution)}
+                        {this.props.member.name}
                     </div>
                 </div>
             </div>
-            {
-                this.state.toggled && <div>
-                    {this.otherSquadMembers().map((member: Member, index) => {
-                        const owedAmount = this.props.squad.debtOfMemberToMember(member, this.props.member);
-                        const text = owedAmount > 0 ?
-                            `owed from ${member.name}: ${money(owedAmount)}` :
-                            `owed to ${member.name}: ${money(-1 * owedAmount)}`;
-                        return <div className={"debtorsContainer"} key={index}>{text}</div>
-                    })}
-                </div>
-            }
         </div>
     }
 

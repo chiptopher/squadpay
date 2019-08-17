@@ -2,129 +2,52 @@ import * as React from "react";
 import {Member} from "../models/Member";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCheck, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {InputWithLabel} from "./InputWithLabel";
+import {useState} from "react";
 
+import './AddMember.scss';
 
 interface Props {
 
     onMemberSubmit(member: Member): void
 }
 
-interface State {
-    addingMember: boolean,
-    nameInput: string,
-    contributionInput: string
-}
+export function AddMember(props: Props) {
+    const [addingMember, setAddingMember] = useState(false);
+    const [nameInput, setNameInput] = useState('');
 
-export class AddMember extends React.Component<Props, State> {
+    const toggleOnClick = () => {
+        setAddingMember(true);
+    };
 
-    constructor(props: Readonly<Props>) {
-        super(props);
-        this.state = {
-            addingMember: false,
-            nameInput: "",
-            contributionInput: ""
-        };
-    }
+    const saveOnClick = () => {
+        props.onMemberSubmit({name: nameInput, contribution: 0.0});
+        setAddingMember(false);
+        setNameInput('');
+    };
 
-    render() {
+    const onNameInputChange = (event: any) => {
+        setNameInput(event.target.value);
+    };
 
-        const buttonBehavior = !this.state.addingMember ? (event: any) => {
-            this.setState({addingMember: true})
-        } : (event: any) => {
-            let createdMember = {
-                name: this.state.nameInput,
-                contribution: Number.parseFloat(this.state.contributionInput)
-            };
-            this.props.onMemberSubmit(createdMember);
-            this.setState({
-                addingMember: false,
-                nameInput: ""
-            })
-        }
-        return <div style={styles.container}>
-            <div style={{width: "100%"}}>
-                <button style={this.state.addingMember ? styles.confirmButton : styles.defaultButton}
-                        id={"squadMemberAddActivate"}
-                        onClick={buttonBehavior}>
-                    {this.state.addingMember ?
-                        <FontAwesomeIcon icon={faCheck}/> :
-                        <FontAwesomeIcon icon={faPlus}/>}
-                </button>
-            </div>
-            {
-                this.state.addingMember && <div style={styles.addMemberInfoContainer}>
-                    <div>
-                        <div style={styles.label}>Name</div>
-                        <input
-                            id={'squadMemberAddName'}
-                            type={'text'}
-                            value={this.state.nameInput}
-                            style={styles.input}
-                            onChange={(event: any) => {
-                                this.setState({
-                                    nameInput: event.target.value
-                                });
-                            }}
-                        />
-                    </div>
-                    <div>
-                        <div style={styles.label}>Amount Contributed</div>
-                        <input
-                            id={'squadMemberAddContribution'}
-                            type={'text'}
-                            value={this.state.contributionInput}
-                            style={styles.input}
-                            onChange={(event: any) => {
-                                this.setState({
-                                    contributionInput: event.target.value
-                                });
-                            }}
-                        />
-                    </div>
-                </div>
-            }
+    return <div className={'add-member'}>
+        <div className={'button-container'}>
+            <button className={addingMember ? 'confirm-button' : 'button'}
+                    id={"squadMemberAddActivate"}
+                    onClick={!addingMember ? toggleOnClick : saveOnClick}>
+                {addingMember ?
+                    <FontAwesomeIcon icon={faCheck}/> :
+                    <FontAwesomeIcon icon={faPlus}/>}
+            </button>
         </div>
-    }
-}
+        {
+            addingMember && <div className={'add-member-info-container'}>
+                <InputWithLabel label={'Name'}
+                                id={'squadMemberAddName'}
+                                type={'text'}
+                                onChange={onNameInputChange}/>
+            </div>
+        }
+    </div>
 
-const styles = {
-    container: {
-        display: "flex",
-        flexDirection: "column" as "column",
-        alignItems: "center" as "center"
-    },
-    defaultButton: {
-        backgroundColor: "#f1c40f",
-        fontSize: 24,
-        borderRadius: 5,
-        width: "100%",
-        textDecoration: "none",
-        color: "#fff",
-        boxShadow: "0px 5px 0px 0px #d8af0a",
-        borderStyle: "none"
-    },
-    confirmButton: {
-        backgroundColor: "#2ecc71",
-        fontSize: 24,
-        borderRadius: 5,
-        width: "100%",
-        textDecoration: "none",
-        color: "#fff",
-        boxShadow: "0px 5px 0px 0px #25a85b",
-        borderStyle: "none"
-    },
-    addMemberInfoContainer: {
-        display: "flex",
-        flexDirection: "column" as "column",
-        width: "100%",
-        marginTop: 10,
-        marginBottom: 10
-    },
-    label: {
-        color: "#a5aeb7"
-    },
-    input: {
-        width: "100%",
-        boxSizing: "border-box" as "border-box"
-    }
-};
+}

@@ -1,6 +1,5 @@
-$brand-color: #f1c40f;
-$font-color: #34495e;
-$money-color: #16a085;
+@import "./styleguide/colors";
+@import "./styleguide/_button.scss";
 
 body {
   color: $font-color;

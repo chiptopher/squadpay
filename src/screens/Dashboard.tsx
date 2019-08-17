@@ -72,12 +72,6 @@ export class Dashboard extends React.Component<Props, State> {
                     <span className={"titlePay"}>pay</span>
                 </div>
                 <div className={"squadContainer"}>
-                    <div className={"costOfTrip"}>
-                        <span className={"costOfTripText"}>Trip Cost:</span>
-                        <span className={"costOfTripMoney"}>
-                            {money(this.state.squad.costOfTrip())}
-                        </span>
-                    </div>
                     <div className={"addMember"}>
                         <AddMember onMemberSubmit={this.onMemberSubmit}/>
                     </div>

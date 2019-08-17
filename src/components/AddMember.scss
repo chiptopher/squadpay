@@ -1,0 +1,18 @@
+
+.add-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .button-container {
+    width: 100%;
+  }
+
+  .add-member-info-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
