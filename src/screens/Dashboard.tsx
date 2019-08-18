@@ -76,8 +76,8 @@ export class Dashboard extends React.Component<Props, State> {
                     <span className={"titleSquad"}>squad</span>
                     <span className={"titlePay"}>pay</span>
                 </div>
-                <div>
-                    <span>Total Cost {money(this.state.squad.totalCostOfContributions())}</span>
+                <div className={'total-cost'}>
+                        <span>Total Cost {money(this.state.squad.totalCostOfContributions())}</span>
                 </div>
                 <div className={"squadContainer"}>
                     <div className={"addMember"}>
