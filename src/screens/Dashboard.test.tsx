@@ -46,7 +46,18 @@ describe('Dashboard', () => {
             subject.find('#squad-mate-1-contribution-input').find('input').simulate('change', {target: {value: 1.0}});
             subject.find('#squad-mate-1-contribution-submit').simulate('click');
             subject.update();
+            subject.update();
             expect(subject.html()).toContain('Total Cost $1.00');
+        });
+        it('should show the contribution under the squad member when toggled', () => {
+
+            const subject = addSquadMate(mountScreen(), 'Squad Mate 1');
+            subject.find('#squad-mate-1-contribution').simulate('click');
+            subject.find('#squad-mate-1-contribution-name-input').find('input').simulate('change', {target: {value: 'Name'}});
+            subject.find('#squad-mate-1-contribution-input').find('input').simulate('change', {target: {value: 1.0}});
+            subject.find('#squad-mate-1-contribution-submit').simulate('click');
+            subject.find('#squad-mate-1').simulate('click');
+            expect(subject.html()).toContain('Name $1.00')
         });
     });
 });
