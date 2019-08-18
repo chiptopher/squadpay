@@ -2,7 +2,7 @@ import * as React from "react";
 import {Squad} from "../models/Squad";
 import {Page} from "../components/Page";
 import {AddMember} from "../components/AddMember";
-import {MemberListElement} from "../components/MemberListElement";
+import {MemberListElement} from "../components/member-list-element/MemberListElement";
 import {money} from "../util/money";
 
 import "./Dashboard.scss";
