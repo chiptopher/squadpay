@@ -10,6 +10,8 @@ import {useState} from "react";
 import {InputWithLabel} from "./InputWithLabel";
 import {ContributionListElement} from "./ContributionListElement";
 import {Contribution} from "../models/Contribution";
+import {faAngleDown, faAngleRight, faArrowDown} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRight} from "@fortawesome/free-solid-svg-icons/faArrowRight";
 
 const createButtonId = (member: Member) => formatNameToId(member) + '-contribution';
 
@@ -36,11 +38,10 @@ export function MemberListElement(props: Props) {
     return <div className={"MemberListElement"}>
         <div>
             <div className={"memberHeader"}>
-                <span id={formatNameToId(props.member)}
-                      onClick={toggleContributionsList}
-                      className={'name-text'}>
-                    {props.member.name}
-                </span>
+                <div id={formatNameToId(props.member)} onClick={toggleContributionsList}>
+                    <ToggleArrow toggled={toggled}/>
+                    <span className={'name-text'}>{props.member.name}</span>
+                </div>
                 <div className={'button-container'}>
                     <button id={createButtonId(props.member)}
                             className={'button-small'}
@@ -99,4 +100,9 @@ const AddContributionModal: React.FunctionComponent<AddContributionModalProps> =
             </button>
         </div>
     </Modal>
+};
+
+const ToggleArrow: React.FunctionComponent<{ toggled: boolean }> = (props) => {
+    return !props.toggled ? <FontAwesomeIcon icon={faAngleRight}/> :
+                            <FontAwesomeIcon icon={faAngleDown}/>;
 };

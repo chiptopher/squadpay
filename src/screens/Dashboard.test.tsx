@@ -49,8 +49,9 @@ describe('Dashboard', () => {
             subject.update();
             expect(subject.html()).toContain('Total Cost $1.00');
         });
-        it('should show the contribution under the squad member when toggled', () => {
-
+    });
+    describe('toggling a user', () => {
+        it('should show the contribution under the squad member', () => {
             const subject = addSquadMate(mountScreen(), 'Squad Mate 1');
             subject.find('#squad-mate-1-contribution').simulate('click');
             subject.find('#squad-mate-1-contribution-name-input').find('input').simulate('change', {target: {value: 'Name'}});
@@ -59,5 +60,5 @@ describe('Dashboard', () => {
             subject.find('#squad-mate-1').simulate('click');
             expect(subject.html()).toContain('Name $1.00')
         });
-    });
+    })
 });
