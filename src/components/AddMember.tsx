@@ -6,6 +6,7 @@ import {InputWithLabel} from "./InputWithLabel";
 import {useState} from "react";
 
 import './AddMember.scss';
+import {faUser} from "@fortawesome/free-solid-svg-icons/faUser";
 
 interface Props {
 
@@ -30,6 +31,15 @@ export function AddMember(props: Props) {
         setNameInput(event.target.value);
     };
 
+    const addingMemberForm = () => {
+        return <div className={'add-member-info-container'}>
+            <InputWithLabel label={'Name'}
+                            id={'squadMemberAddName'}
+                            type={'text'}
+                            onChange={onNameInputChange}/>
+        </div>;
+    };
+
     return <div className={'add-member'}>
         <div className={'button-container'}>
             <button className={addingMember ? 'confirm-button' : 'button'}
@@ -37,17 +47,10 @@ export function AddMember(props: Props) {
                     onClick={!addingMember ? toggleOnClick : saveOnClick}>
                 {addingMember ?
                     <FontAwesomeIcon icon={faCheck}/> :
-                    <FontAwesomeIcon icon={faPlus}/>}
+                    <FontAwesomeIcon icon={faUser}/>}
             </button>
         </div>
-        {
-            addingMember && <div className={'add-member-info-container'}>
-                <InputWithLabel label={'Name'}
-                                id={'squadMemberAddName'}
-                                type={'text'}
-                                onChange={onNameInputChange}/>
-            </div>
-        }
+        {addingMember && addingMemberForm()}
     </div>
 
 }
