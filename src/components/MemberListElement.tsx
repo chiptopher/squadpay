@@ -37,17 +37,24 @@ export function MemberListElement(props: Props) {
 
     return <div className={"MemberListElement"}>
         <div>
-            <div className={"memberHeader"}>
-                <div id={formatNameToId(props.member)} onClick={toggleContributionsList}>
+            <div className={"memberHeader"} id={formatNameToId(props.member)} onClick={toggleContributionsList} >
+                <div className={'member-content-and-toggled'}>
                     <ToggleArrow toggled={toggled}/>
-                    <span className={'name-text'}>{props.member.name}</span>
-                </div>
-                <div className={'button-container'}>
-                    <button id={createButtonId(props.member)}
-                            className={'button-small'}
-                            onClick={() => setShowModal(true)}>
-                        <FontAwesomeIcon icon={faPlus}/>
-                    </button>
+                    <div className={'member-content'}>
+                        <div className={'name-and-button'}>
+                            <span className={'name-text'}>{props.member.name}</span>
+                            <div className={'button-container'}>
+                                <button id={createButtonId(props.member)}
+                                        className={'button-small'}
+                                        onClick={() => setShowModal(true)}>
+                                    <FontAwesomeIcon icon={faPlus}/>
+                                </button>
+                            </div>
+                        </div>
+                        {
+                            toggled && <ShowContributions member={props.member}/>
+                        }
+                    </div>
                 </div>
                 {
                     showModal && <AddContributionModal member={props.member}
@@ -55,9 +62,6 @@ export function MemberListElement(props: Props) {
                                                        onClose={() => setShowModal(false)}/>
                 }
             </div>
-            {
-                toggled && <ShowContributions member={props.member}/>
-            }
         </div>
     </div>;
 }
@@ -104,5 +108,5 @@ const AddContributionModal: React.FunctionComponent<AddContributionModalProps> =
 
 const ToggleArrow: React.FunctionComponent<{ toggled: boolean }> = (props) => {
     return !props.toggled ? <FontAwesomeIcon icon={faAngleRight}/> :
-                            <FontAwesomeIcon icon={faAngleDown}/>;
+        <FontAwesomeIcon icon={faAngleDown}/>;
 };

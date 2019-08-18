@@ -1,16 +1,40 @@
+@import "../styles";
+
 .MemberListElement {
+  padding: 8px;
+  background-color: $member-list-element-background;
+  border-radius: 3px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 
   .memberHeader {
     display: flex;
     align-items: center;
 
-    .name-text {
-      font-size: 30px;
-    }
+    .member-content-and-toggled {
+      display: flex;
 
-    .button-container {
-      padding-left: 16px;
-      width: 32px;
+      .member-content {
+        display: flex;
+        flex-direction: column;
+            padding-left: 8px;
+
+        .name-and-button {
+
+          display: flex;
+          align-items: center;
+          flex-direction: row;
+
+          .name-text {
+            font-size: 30px;
+          }
+
+          .button-container {
+            padding-left: 16px;
+            width: 32px;
+          }
+        }
+      }
     }
   }
 

@@ -58,6 +58,7 @@ describe('Dashboard', () => {
             subject.find('#squad-mate-1-contribution-input').find('input').simulate('change', {target: {value: 1.0}});
             subject.find('#squad-mate-1-contribution-submit').simulate('click');
             subject.find('#squad-mate-1').simulate('click');
+            subject.update();
             expect(subject.html()).toContain('Name $1.00')
         });
     })
