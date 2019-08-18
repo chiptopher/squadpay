@@ -1,7 +1,8 @@
 @import "colors";
 
-@mixin button($button-color, $button-shadow-color) {
-  font-size: 24px;
+@mixin button($button-color, $button-shadow-color, $font-size: 24px) {
+  font-size: $font-size;
+  font-weight: bold;
   border-radius: 5px;
   width: 100%;
   text-decoration: none;
@@ -19,3 +20,6 @@
   @include button($brand-color, $brand-color-shade);
 }
 
+.button-small {
+  @include button($brand-color, $brand-color-shade, 18px)
+}

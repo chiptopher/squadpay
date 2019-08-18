@@ -38,4 +38,15 @@ describe('Dashboard', () => {
             expect(subject.find("#squadMemberAddName")).toHaveLength(0);
         });
     });
+
+    describe('Adding an expense to a user', () => {
+        it('should increase the overall cost of the trip', () => {
+            const subject = addSquadMate(mountScreen(), 'Squad Mate 1');
+            subject.find('#squad-mate-1-contribution').simulate('click');
+            subject.find('#squad-mate-1-contribution-input').find('input').simulate('change', {target: {value: 1.0}});
+            subject.find('#squad-mate-1-contribution-submit').simulate('click');
+            subject.update();
+            expect(subject.html()).toContain('Total Cost $1.00');
+        });
+    });
 });

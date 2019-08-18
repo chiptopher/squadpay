@@ -6,7 +6,7 @@ import {MemberListElement} from "../components/MemberListElement";
 import {money} from "../util/money";
 
 import "./Dashboard.scss";
-import {Member} from "../models/Member";
+import {addContributions, Member} from "../models/Member";
 
 export interface Props {
 
@@ -59,7 +59,12 @@ export class Dashboard extends React.Component<Props, State> {
     private readonly loadMembers = () => {
         return this.state.squad.squadMembers.map((member) => {
             return <div key={member.name} className={"member"}>
-                <MemberListElement member={member} squad={this.state.squad}/>
+                <MemberListElement addContribution={(name: string, amount: number) => {
+                    addContributions(member, name, amount);
+                    this.setState({
+                        squad: this.state.squad
+                    })
+                }} member={member} squad={this.state.squad}/>
             </div>
         })
     };
@@ -70,6 +75,9 @@ export class Dashboard extends React.Component<Props, State> {
                 <div className={"title"}>
                     <span className={"titleSquad"}>squad</span>
                     <span className={"titlePay"}>pay</span>
+                </div>
+                <div>
+                    <span>Total Cost {money(this.state.squad.totalCostOfContributions())}</span>
                 </div>
                 <div className={"squadContainer"}>
                     <div className={"addMember"}>

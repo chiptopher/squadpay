@@ -1,5 +1,6 @@
 import {Member} from "./Member";
 import {Squad} from "./Squad";
+import {Contribution} from "./Contribution";
 
 function createMember(name: string, contribution: number): Member {
     return {name, contribution}
@@ -22,11 +23,13 @@ describe("Member", () => {
         it("should calculate the total cost of the trip", () => {
             const member1: Member = {
                 name: "name1",
-                contribution: 25.0
+                contribution: 25.0,
+                contributions: [new Contribution('', 25)]
             };
             const member2: Member = {
                 name: "name2",
-                contribution: 25.0
+                contribution: 25.0,
+                contributions: [new Contribution('', 25)]
             };
             const squad = new Squad();
             squad.addSquadMember(member1);
@@ -36,6 +39,28 @@ describe("Member", () => {
         it("should result in zero when there are no members", () => {
             const squad = new Squad();
             expect(squad.costOfTrip()).toEqual(0);
+        });
+    });
+    describe("totalCostOfContributions", () => {
+        it("should calculate the total cost of the trip", () => {
+            const member1: Member = {
+                name: "name1",
+                contribution: 0.0,
+                contributions: [new Contribution('', 25)]
+            };
+            const member2: Member = {
+                name: "name2",
+                contribution: 0.0,
+                contributions: [new Contribution('', 25)]
+            };
+            const squad = new Squad();
+            squad.addSquadMember(member1);
+            squad.addSquadMember(member2);
+            expect(squad.totalCostOfContributions()).toEqual(50.0);
+        });
+        it("should result in zero when there are no members", () => {
+            const squad = new Squad();
+            expect(squad.totalCostOfContributions()).toEqual(0);
         });
     });
     describe("getDebtOfMemberToMember", () => {

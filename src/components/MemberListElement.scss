@@ -2,18 +2,16 @@
 
   .memberHeader {
     display: flex;
+    align-items: center;
 
-    .toggleIndicator {
-      width: 24px;
-      padding-right: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .name-text {
+      font-size: 30px;
     }
-  }
 
-  .debtorsContainer {
-    padding-left: 44px;
+    .button-container {
+      padding-left: 16px;
+      width: 32px;
+    }
   }
 
 }

@@ -1,0 +1,21 @@
+@import "../styles";
+
+
+.modal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: adjust-color(black, $alpha: -0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .modal-content {
+    padding: 24px;
+    background-color: $background-color;
+    border-radius: 3px;
+  }
+}

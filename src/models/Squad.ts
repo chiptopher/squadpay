@@ -11,6 +11,9 @@ export class Squad {
         this.squadMembers.push(member);
     }
 
+    /**
+     * @deprecated
+     */
     costOfTrip(): number {
         if (this.squadMembers.length === 0) {
             return 0;
@@ -21,6 +24,21 @@ export class Squad {
                 contribution: prev.contribution + current.contribution
             };
         }).contribution;
+    }
+
+    totalCostOfContributions(): number {
+        if (this.squadMembers.length === 0) {
+            return 0;
+        }
+        let total = 0;
+        this.squadMembers.forEach((member) => {
+            let memberTotal = 0;
+            if (member.contributions) {
+                member.contributions.forEach(contribution => memberTotal += contribution.amount)
+            }
+            total += memberTotal;
+        });
+        return total;
     }
 
     debtOfMemberToMember(member1: Member, member2: Member): number {
