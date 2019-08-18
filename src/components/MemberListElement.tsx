@@ -21,22 +21,11 @@ interface Props {
 
 export function MemberListElement(props: Props) {
     const [showModal, setShowModal] = useState(false);
-    const [contributionAmount, setContributionAmount] = useState(0.0);
-    const [contributionName, setContributionName] = useState('');
     const [toggled, setToggled] = useState(false);
 
-
-    const modalOnClose = () => {
-        setShowModal(false)
-    };
-
-    const addContributionOnClick = () => {
-        setShowModal(true)
-    };
-
     const submitContributionOnClick = (name: string, amount: number) => {
-        modalOnClose();
-        props.addContribution(contributionName, contributionAmount);
+        setShowModal(false)
+        props.addContribution(name, amount);
     };
 
     const toggleContributionsList = () => {
@@ -55,42 +44,59 @@ export function MemberListElement(props: Props) {
                 <div className={'button-container'}>
                     <button id={createButtonId(props.member)}
                             className={'button-small'}
-                            onClick={addContributionOnClick}>
+                            onClick={() => setShowModal(true)}>
                         <FontAwesomeIcon icon={faPlus}/>
                     </button>
                 </div>
                 {
-                    showModal && <Modal onClose={modalOnClose}>
-                        <div>
-                            <InputWithLabel label={'Contribution Name'}
-                                            id={createButtonId(props.member) + '-name-input'}
-                                            onChange={(event: any) => {
-                                                setContributionName(event.target.value);
-                                            }}/>
-                            <InputWithLabel id={createButtonId(props.member) + '-input'}
-                                            label={'Contribution Amount'}
-                                            type={'number'}
-                                            onChange={(event: any) => {
-                                                setContributionAmount(Number(event.target.value));
-                                            }}/>
-                            <button id={createButtonId(props.member) + '-submit'} className={'button-small'}
-                                    onClick={() => {
-                                        submitContributionOnClick(contributionName, contributionAmount)
-                                    }}>Add Amount
-                            </button>
-                        </div>
-                    </Modal>
+                    showModal && <AddContributionModal member={props.member}
+                                                       onSubmit={submitContributionOnClick}
+                                                       onClose={() => setShowModal(false)}/>
                 }
             </div>
-            <div>
-                {
-                    toggled && <div> {
-                        props.member.contributions && props.member.contributions.map((contribution: Contribution) => {
-                            return <ContributionListElement key={props.member.name + contribution.name} contribution={contribution}/>;
-                        })
-                    }</div>
-                }
-            </div>
+            {
+                toggled && <ShowContributions member={props.member}/>
+            }
         </div>
     </div>;
 }
+
+const ShowContributions: React.FunctionComponent<{ member: Member }> = (props) => {
+    return <div> {
+        props.member.contributions && props.member.contributions.map((contribution: Contribution) => {
+            return <ContributionListElement key={props.member.name + contribution.name}
+                                            contribution={contribution}/>;
+        })
+    }</div>
+};
+
+interface AddContributionModalProps {
+    onClose: () => void;
+    onSubmit: (name: string, amount: number) => void;
+    member: Member;
+}
+
+const AddContributionModal: React.FunctionComponent<AddContributionModalProps> = (props) => {
+    const [contributionAmount, setContributionAmount] = useState(0.0);
+    const [contributionName, setContributionName] = useState('');
+    return <Modal onClose={props.onClose}>
+        <div>
+            <InputWithLabel label={'Contribution Name'}
+                            id={createButtonId(props.member) + '-name-input'}
+                            onChange={(event: any) => {
+                                setContributionName(event.target.value);
+                            }}/>
+            <InputWithLabel id={createButtonId(props.member) + '-input'}
+                            label={'Contribution Amount'}
+                            type={'number'}
+                            onChange={(event: any) => {
+                                setContributionAmount(Number(event.target.value));
+                            }}/>
+            <button id={createButtonId(props.member) + '-submit'} className={'button-small'}
+                    onClick={() => {
+                        props.onSubmit(contributionName, contributionAmount)
+                    }}>Add Amount
+            </button>
+        </div>
+    </Modal>
+};
