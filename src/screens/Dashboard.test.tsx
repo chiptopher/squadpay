@@ -32,8 +32,8 @@ describe('Dashboard', () => {
     function addContributionToSquadMateWithName(subject: any, name: string, contributionName: string, contributionAmount: number) {
         const formattedName = formatNameToId(name);
         subject.find(`#${formattedName}-contribution`).simulate('click');
-        subject.find(`#${formattedName}-contribution-name-input`).find('input').simulate('change', {target: {value: 'Name'}});
-        subject.find(`#${formattedName}-contribution-input`).find('input').simulate('change', {target: {value: 1.0}});
+        subject.find(`#${formattedName}-contribution-name-input`).find('input').simulate('change', {target: {value:contributionName}});
+        subject.find(`#${formattedName}-contribution-input`).find('input').simulate('change', {target: {value: contributionAmount}});
         subject.find(`#${formattedName}-contribution-submit`).simulate('click');
         return subject.update();
     }
@@ -98,7 +98,7 @@ describe('Dashboard', () => {
                 subject.find('#squad-mate-1').simulate('click');
                 subject.find('.tab').simulate('click');
                 subject.update();
-                expect(subject.html()).toContain('Owed by Squad Mate 2')
+                expect(subject.html()).toContain('$1.00')
             });
         })
     })
