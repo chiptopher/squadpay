@@ -100,6 +100,16 @@ describe('Dashboard', () => {
                 subject.update();
                 expect(subject.html()).toContain('$1.00')
             });
+            it("should say 'owed to' if the the member owes money to a person in the list", () => {
+                let subject = addSquadMate(mountScreen(), 'Squad Mate 1');
+                subject = addSquadMate(subject, 'Squad Mate 2');
+                addContributionToSquadMateWithName(subject, 'Squad Mate 1', 'name1', 8.0);
+                addContributionToSquadMateWithName(subject, 'Squad Mate 2', 'name2', 10.0);
+                subject.find('#squad-mate-1').simulate('click');
+                subject.find('.tab').simulate('click');
+                subject.update();
+                expect(subject.html()).toContain('Owed to')
+            });
         })
     })
 });
