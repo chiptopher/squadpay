@@ -2,9 +2,7 @@ import * as React from "react";
 
 import {mount} from 'enzyme'
 import {Dashboard} from "./Dashboard";
-import {formatMemberToId, formatNameToId} from "../models/Member";
-import {ContributionsList} from "../components/member-list-element/ContributionsList";
-import {TabSelector} from "../components/TabSelector";
+import {formatNameToId} from "../models/Member";
 
 describe('Dashboard', () => {
     function mountScreen() {
@@ -87,7 +85,17 @@ describe('Dashboard', () => {
                 subject = addSquadMate(subject, 'Squad Mate 2');
                 addContributionToSquadMateWithName(subject, 'Squad Mate 1', 'name1', 10.0);
                 addContributionToSquadMateWithName(subject, 'Squad Mate 2', 'name2', 8.0);
-            subject.find('#squad-mate-1').simulate('click');
+                subject.find('#squad-mate-1').simulate('click');
+                subject.find('.tab').simulate('click');
+                subject.update();
+                expect(subject.html()).toContain('Owed by Squad Mate 2')
+            });
+            it('should display the amounts owed to and from each member', () => {
+                let subject = addSquadMate(mountScreen(), 'Squad Mate 1');
+                subject = addSquadMate(subject, 'Squad Mate 2');
+                addContributionToSquadMateWithName(subject, 'Squad Mate 1', 'name1', 10.0);
+                addContributionToSquadMateWithName(subject, 'Squad Mate 2', 'name2', 8.0);
+                subject.find('#squad-mate-1').simulate('click');
                 subject.find('.tab').simulate('click');
                 subject.update();
                 expect(subject.html()).toContain('Owed by Squad Mate 2')

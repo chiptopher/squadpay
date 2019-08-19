@@ -11,21 +11,6 @@ export class Squad {
         this.squadMembers.push(member);
     }
 
-    /**
-     * @deprecated
-     */
-    costOfTrip(): number {
-        if (this.squadMembers.length === 0) {
-            return 0;
-        }
-        return this.squadMembers.reduce((prev, current) => {
-            return {
-                name: "",
-                contribution: prev.contribution + current.contribution
-            };
-        }).contribution;
-    }
-
     otherSquadMembers(member: Member): Member[] {
         return this.squadMembers.filter((element) => element !== member );
     }
@@ -36,11 +21,7 @@ export class Squad {
         }
         let total = 0;
         this.squadMembers.forEach((member) => {
-            let memberTotal = 0;
-            if (member.contributions) {
-                member.contributions.forEach(contribution => memberTotal += contribution.amount)
-            }
-            total += memberTotal;
+            total += member.totalCostOfContributions();
         });
         return total;
     }
@@ -54,29 +35,28 @@ export class Squad {
             const overpaidMember = this.memberOverpaid(member1) ? member1 : member2;
             const underpaidMember = this.memberOverpaid(member2) ? member1 : member2;
 
-            const costOfTrip = this.costOfTrip();
+            const costOfTrip = this.totalCostOfContributions();
             const contributionPerMember = costOfTrip / this.squadMembers.length;
-            let amount = (contributionPerMember - underpaidMember.contribution) * (overpaidMember.contribution / this.overpaidTotal());
+            let amount = (contributionPerMember - underpaidMember.totalCostOfContributions()) * (overpaidMember.totalCostOfContributions() / this.overpaidTotal());
             return this.memberOverpaid(member1) ? -1 * amount : amount;
         }
         throw new Error("it broke");
     }
 
     expectedContributionPerMember(): number {
-        return this.costOfTrip() / this.squadMembers.length;
+        return this.totalCostOfContributions() / this.squadMembers.length;
     }
 
     memberOverpaid(member: Member): boolean {
-        return member.contribution > this.expectedContributionPerMember();
+        return member.totalCostOfContributions() > this.expectedContributionPerMember();
     }
 
     overpaidTotal(): number {
-        return this.overpaidMembers().reduce((prev, current) => {
-            return {
-                name: "",
-                contribution: prev.contribution + current.contribution
-            }
-        }).contribution
+        let total = 0;
+        this.overpaidMembers().forEach((member) => {
+            total += member.totalCostOfContributions();
+        });
+        return total;
     }
 
     overpaidMembers(): Member[] {

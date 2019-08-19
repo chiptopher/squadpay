@@ -3,16 +3,13 @@ import {Squad} from "./Squad";
 import {Contribution} from "./Contribution";
 
 function createMember(name: string, contribution: number): Member {
-    return {name, contribution}
+    return new Member(name, [{name: '', amount: contribution}]);
 }
 
 describe("Member", () => {
     describe("addMember", () => {
         it("should add the member to the squad", () => {
-            const member: Member = {
-                name: "name",
-                contribution: 100.0
-            };
+            const member = new Member('name', [new Contribution('name', 100.0)]);
             const squad = new Squad();
             squad.addSquadMember(member);
             expect(squad.squadMembers).toContain(member);
@@ -21,14 +18,8 @@ describe("Member", () => {
 
     describe('otherSquadMembers', () => {
         it('should return the squad members in the squad that arent the given one', () => {
-            const member1: Member = {
-                name: "name1",
-                contribution: 0.0
-            };
-            const member2: Member = {
-                name: "name2",
-                contribution: 0.0
-            };
+            const member1 = new Member('name1', [new Contribution('name', 0.0)]);
+            const member2 = new Member('name2', [new Contribution('name', 0.0)]);
             const squad = new Squad();
             squad.addSquadMember(member1);
             squad.addSquadMember(member2);
@@ -36,40 +27,10 @@ describe("Member", () => {
         })
     });
 
-    describe("costOfTrip", () => {
-        it("should calculate the total cost of the trip", () => {
-            const member1: Member = {
-                name: "name1",
-                contribution: 25.0,
-                contributions: [new Contribution('', 25)]
-            };
-            const member2: Member = {
-                name: "name2",
-                contribution: 25.0,
-                contributions: [new Contribution('', 25)]
-            };
-            const squad = new Squad();
-            squad.addSquadMember(member1);
-            squad.addSquadMember(member2);
-            expect(squad.costOfTrip()).toEqual(50.0);
-        });
-        it("should result in zero when there are no members", () => {
-            const squad = new Squad();
-            expect(squad.costOfTrip()).toEqual(0);
-        });
-    });
     describe("totalCostOfContributions", () => {
         it("should calculate the total cost of the trip", () => {
-            const member1: Member = {
-                name: "name1",
-                contribution: 0.0,
-                contributions: [new Contribution('', 25)]
-            };
-            const member2: Member = {
-                name: "name2",
-                contribution: 0.0,
-                contributions: [new Contribution('', 25)]
-            };
+            const member1: Member = new Member("name1",[new Contribution('', 25)]);
+            const member2 = new Member("name2", [new Contribution('', 25)]);
             const squad = new Squad();
             squad.addSquadMember(member1);
             squad.addSquadMember(member2);
@@ -115,10 +76,10 @@ describe("Member", () => {
                 squad.addSquadMember(memberThatPayedLeast);
             });
             it("should calculate the debt of the underpaid to both overpaid", () => {
-                let underpaidAmount = squad.expectedContributionPerMember() - memberThatPayedLeast.contribution;
-                let debtToMemberThatPayedMost = underpaidAmount * (memberThatPayedMost.contribution / squad.overpaidTotal());
+                let underpaidAmount = squad.expectedContributionPerMember() - memberThatPayedLeast.totalCostOfContributions();
+                let debtToMemberThatPayedMost = underpaidAmount * (memberThatPayedMost.totalCostOfContributions() / squad.overpaidTotal());
                 expect(squad.debtOfMemberToMember(memberThatPayedLeast, memberThatPayedMost)).toEqual(debtToMemberThatPayedMost);
-                let debtToMemberThatPayedMiddle = underpaidAmount * (memberThatPayedMiddle.contribution / squad.overpaidTotal());
+                let debtToMemberThatPayedMiddle = underpaidAmount * (memberThatPayedMiddle.totalCostOfContributions() / squad.overpaidTotal());
                 expect(squad.debtOfMemberToMember(memberThatPayedLeast, memberThatPayedMiddle)).toEqual(debtToMemberThatPayedMiddle);
             });
             it("should not register a debt for a member that overpaid for another that overpaid", () => {
@@ -151,9 +112,9 @@ describe("Member", () => {
             const memberThatUnderpaidMore = createMember("name4", 10);
             const squad = new Squad();
 
-            const amountOverpaid = (memberThatOverpaidMore.contribution + memberThatOverpaidLess.contribution);
-            const memberOverpaidMorePercent = memberThatOverpaidMore.contribution / amountOverpaid;
-            const memberOverpaidLessPercent = memberThatOverpaidLess.contribution / amountOverpaid;
+            const amountOverpaid = (memberThatOverpaidMore.totalCostOfContributions() + memberThatOverpaidLess.totalCostOfContributions());
+            const memberOverpaidMorePercent = memberThatOverpaidMore.totalCostOfContributions() / amountOverpaid;
+            const memberOverpaidLessPercent = memberThatOverpaidLess.totalCostOfContributions() / amountOverpaid;
 
             beforeEach(() => {
                 squad.addSquadMember(memberThatOverpaidMore);
@@ -163,7 +124,7 @@ describe("Member", () => {
             });
 
             it("should equally divide the debt owed by each debtor to those that overpaid", () => {
-                let underpaidLessUnderpaymentAmount = squad.expectedContributionPerMember() - memberThatUnderpaidLess.contribution;
+                let underpaidLessUnderpaymentAmount = squad.expectedContributionPerMember() - memberThatUnderpaidLess.totalCostOfContributions();
                 const memberUnderpaidLessDebtToOverpaidMore = underpaidLessUnderpaymentAmount * memberOverpaidMorePercent;
                 expect(squad.debtOfMemberToMember(memberThatUnderpaidLess, memberThatOverpaidMore)).toEqual(memberUnderpaidLessDebtToOverpaidMore);
                 expect(squad.debtOfMemberToMember(memberThatOverpaidMore, memberThatUnderpaidLess)).toEqual(-1 * memberUnderpaidLessDebtToOverpaidMore);

@@ -22,7 +22,7 @@ export function AddMember(props: Props) {
     };
 
     const saveOnClick = () => {
-        props.onMemberSubmit({name: nameInput, contribution: 0.0});
+        props.onMemberSubmit(new Member(nameInput));
         setAddingMember(false);
         setNameInput('');
     };

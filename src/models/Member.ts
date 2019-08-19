@@ -1,13 +1,23 @@
 import {Contribution} from "./Contribution";
 
 
-export interface Member {
+export class Member {
     name: string;
-    /**
-     * @deprecated
-     */
-    contribution: number;
-    contributions?: Contribution[];
+    contributions: Contribution[];
+
+    constructor(name: string, contributions: Contribution[] = []) {
+        this.name = name;
+        this.contributions = contributions;
+    }
+
+    public totalCostOfContributions() {
+        let total = 0;
+        this.contributions.forEach((contribution) => {
+            total += contribution.amount;
+        });
+        return total;
+    }
+
 }
 
 export function formatMemberToId(member: Member): string {
