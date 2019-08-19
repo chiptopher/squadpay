@@ -10,8 +10,12 @@ export interface Member {
     contributions?: Contribution[];
 }
 
-export function formatNameToId(member: Member): string {
-    return member.name.replace(/\s+/g, "-").toLowerCase();
+export function formatMemberToId(member: Member): string {
+    return formatNameToId(member.name);
+}
+
+export function formatNameToId(name: string): string {
+    return name.replace(/\s+/g, "-").toLowerCase();
 }
 
 export function addContributions(member: Member, name: string, amount: number) {

@@ -19,6 +19,23 @@ describe("Member", () => {
         });
     });
 
+    describe('otherSquadMembers', () => {
+        it('should return the squad members in the squad that arent the given one', () => {
+            const member1: Member = {
+                name: "name1",
+                contribution: 0.0
+            };
+            const member2: Member = {
+                name: "name2",
+                contribution: 0.0
+            };
+            const squad = new Squad();
+            squad.addSquadMember(member1);
+            squad.addSquadMember(member2);
+            expect(squad.otherSquadMembers(member1)).toEqual([member2])
+        })
+    });
+
     describe("costOfTrip", () => {
         it("should calculate the total cost of the trip", () => {
             const member1: Member = {

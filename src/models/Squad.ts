@@ -26,6 +26,10 @@ export class Squad {
         }).contribution;
     }
 
+    otherSquadMembers(member: Member): Member[] {
+        return this.squadMembers.filter((element) => element !== member );
+    }
+
     totalCostOfContributions(): number {
         if (this.squadMembers.length === 0) {
             return 0;

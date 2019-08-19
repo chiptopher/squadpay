@@ -1,5 +1,4 @@
 import * as React from "react";
-import {formatNameToId, Member} from "../../models/Member";
 import {Squad} from "../../models/Squad";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -16,6 +15,9 @@ import {ToggleArrow} from "./ToggleArrow";
 import {createContributionId} from "./helpers";
 import {AddContributionModal} from "./AddContributionModal";
 import {ContributionsList} from "./ContributionsList";
+import {TabElement, TabSelector} from "../TabSelector";
+import {formatMemberToId, Member} from "../../models/Member";
+import {PaymentsList} from "./PaymentsList";
 
 
 interface Props {
@@ -24,9 +26,13 @@ interface Props {
     addContribution: (name: string, amount: number) => void
 }
 
+const CONTRIBUTIONS_TAB = {name: 'Contributions'};
+const PAYMENTS_TAB = {name: 'Payments'};
+
 export function MemberListElement(props: Props) {
     const [showModal, setShowModal] = useState(false);
     const [toggled, setToggled] = useState(false);
+    const [chosenTab, setChosenTab] = useState(CONTRIBUTIONS_TAB);
 
     const submitContributionOnClick = (name: string, amount: number) => {
         setShowModal(false);
@@ -42,10 +48,22 @@ export function MemberListElement(props: Props) {
         setShowModal(true);
     };
 
+    const onChosenTabSelect = (chosenTab: TabElement) => {
+        setChosenTab(chosenTab);
+    };
+
+    function displayTab() {
+        if (chosenTab.name === CONTRIBUTIONS_TAB.name) {
+            return <ContributionsList member={props.member}/>;
+        } else if (chosenTab.name === PAYMENTS_TAB.name) {
+            return <PaymentsList squad={props.squad} member={props.member}/>;
+        }
+    }
+
 
     return <div className={"MemberListElement"}>
         <div>
-            <div className={"member-content"} id={formatNameToId(props.member)} onClick={toggleContributionsList}>
+            <div className={"member-content"} id={formatMemberToId(props.member)} onClick={toggleContributionsList}>
                 <div className={'member-header'}>
                     <div className={'member-name-and-button'}>
                         <span className={'name-text'}>{props.member.name}</span>
@@ -60,7 +78,9 @@ export function MemberListElement(props: Props) {
                     <ToggleArrow toggled={toggled}/>
                 </div>
                 {
-                    toggled && <ContributionsList member={props.member}/>
+                    toggled && <TabSelector tabs={[CONTRIBUTIONS_TAB, PAYMENTS_TAB]} onTabSelected={onChosenTabSelect}>
+                        {displayTab()}
+                    </TabSelector>
                 }
             </div>
             {

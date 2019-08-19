@@ -1,0 +1,27 @@
+@import "../styles";
+
+@mixin border-bottom($color) {
+  border-bottom-width: 2px;
+  border-bottom-color: $color;
+  border-bottom-style: solid;
+}
+
+.tab-selector {
+  width: 100%;
+
+  .tabs {
+    display: flex;
+    flex-direction: row;
+
+    .tab {
+      margin-right: 20px;
+      text-align: center;
+      @include border-bottom($grey7)
+    }
+
+    .selected-tab {
+      @extend .tab;
+      @include border-bottom($brand-color)
+    }
+  }
+}

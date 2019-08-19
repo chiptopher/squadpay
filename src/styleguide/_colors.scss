@@ -2,13 +2,6 @@
   @return scale_color($color, $alpha: $percentage)
 }
 
-$grey0: lighten(black, -10%);
-$grey1: lighten(black, -20%);
-$grey2: lighten(black, -30%);
-$grey4: lighten(black, -50%);
-$grey7: lighten(black, -70%);
-$grey9: lighten(black, -97%);
-
 
 $background-color: white;
 
@@ -21,5 +14,20 @@ $confirm-color-shade: #25a85b;
 $font-color: #34495e;
 $money-color: #16a085;
 $button-text-color: white;
+
+$grey0: lighten(black, -10%);
+$grey1: lighten(black, -20%);
+$grey2: lighten(black, -30%);
+$grey4: lighten(black, -50%);
+$grey7: lighten(black, -70%);
+$grey9: lighten(black, -97%);
+
+$primary: $brand-color;
+
+$primary0: lighten($brand-color, -10%);
+$primary2: lighten($brand-color, -30%);
+$primary4: lighten($brand-color, -50%);
+$primary7: lighten($brand-color, -70%);
+$primary9: lighten($brand-color, -90%);
 
 $member-list-element-background: $grey9;

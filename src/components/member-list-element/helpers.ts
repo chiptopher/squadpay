@@ -1,3 +1,3 @@
-import {formatNameToId, Member} from "../../models/Member";
+import {formatMemberToId, Member} from "../../models/Member";
 
-export const createContributionId = (member: Member) => formatNameToId(member) + '-contribution';
+export const createContributionId = (member: Member) => formatMemberToId(member) + '-contribution';
