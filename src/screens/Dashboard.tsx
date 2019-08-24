@@ -7,69 +7,40 @@ import {money} from "../util/money";
 
 import "./Dashboard.scss";
 import {addContributions, Member} from "../models/Member";
+import {useState} from "react";
 
 export interface Props {
-
 }
 
-interface State {
-    squad: Squad;
-    currentInput: string;
-    width: number;
-}
+export function Dashboard(props: Props){
 
-export class Dashboard extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            squad: new Squad(),
-            currentInput: '',
-            width: window.innerWidth
-        };
-        this.generateContainerStyle = this.generateContainerStyle.bind(this);
-        this.loadMembers = this.loadMembers.bind(this);
+    const [squad, setSquad] = useState(new Squad());
+
+    const deepCopyOfSquad = (): Squad => {
+        const newSquad = new Squad();
+        squad.squadMembers.forEach((member) => {
+            newSquad.addSquadMember(member);
+        });
+        return newSquad;
     }
 
-    componentWillMount() {
-        window.addEventListener('resize', this.handleWindowSizeChange);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.handleWindowSizeChange);
-    }
-
-    handleWindowSizeChange = () => {
-        this.setState({width: window.innerWidth});
+    const onMemberSubmit = (member: Member) => {
+        const newSquad = deepCopyOfSquad();
+        newSquad.addSquadMember(member);
+        setSquad(newSquad);
     };
 
-    generateContainerStyle(): string {
-        const isMobile = this.state.width <= 500;
-        let finalStyle = isMobile ? 'mobileSquadContainer' : 'squadContainer';
-        return finalStyle;
-    }
-
-    private onMemberSubmit = (member: Member) => {
-        const squad = this.state.squad;
-        squad.addSquadMember(member);
-        this.setState({
-            squad: squad
-        })
-    };
-
-    private readonly loadMembers = () => {
-        return this.state.squad.squadMembers.map((member) => {
+    const loadMembers = () => {
+        return squad.squadMembers.map((member) => {
             return <div key={member.name} className={"member"}>
                 <MemberListElement addContribution={(name: string, amount: number) => {
                     addContributions(member, name, amount);
-                    this.setState({
-                        squad: this.state.squad
-                    })
-                }} member={member} squad={this.state.squad}/>
+                    setSquad(deepCopyOfSquad());
+                }} member={member} squad={squad}/>
             </div>
         })
     };
 
-    render() {
         return <Page>
             <div className={"Dashboard"}>
                 <div className={"title"}>
@@ -78,14 +49,14 @@ export class Dashboard extends React.Component<Props, State> {
                 </div>
                 <div className={"squadContainer"}>
                     <div className={'total-cost'}>
-                        <span>Total Cost {money(this.state.squad.totalCostOfContributions())}</span>
+                        <span>Total Cost {money(squad.totalCostOfContributions())}</span>
                     </div>
                     <div className={"addMember"}>
-                        <AddMember onMemberSubmit={this.onMemberSubmit}/>
+                        <AddMember onMemberSubmit={onMemberSubmit}/>
                     </div>
-                    <div className={"membersContainer"}>{this.loadMembers()}</div>
+                    <div className={"membersContainer"}>{loadMembers()}</div>
                 </div>
             </div>
         </Page>;
-    }
+
 }
