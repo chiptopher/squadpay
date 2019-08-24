@@ -24,13 +24,16 @@ export const AddContributionModal: React.FunctionComponent<Props> = (props) => {
             <InputWithLabel id={createContributionId(props.member) + '-input'}
                             label={'Contribution Amount'}
                             type={'number'}
+                            placeholder={'Contribution Amount'}
                             onChange={(event: any) => {
                                 setContributionAmount(Number(event.target.value));
                             }}/>
             <button id={createContributionId(props.member) + '-submit'} className={'button-small'}
                     onClick={() => {
                         props.onSubmit(contributionName, contributionAmount)
-                    }}>Add Amount
+                    }}
+                    data-testid="submit">
+                Add Amount
             </button>
         </div>
     </Modal>

@@ -36,13 +36,14 @@ export function AddMember(props: Props) {
             <InputWithLabel label={'Name'}
                             id={'squadMemberAddName'}
                             type={'text'}
+                            placeholder={'Squad Member'}
                             onChange={onNameInputChange}/>
         </div>;
     };
 
     return <div className={'add-member'}>
         <div className={'button-container'}>
-            <button className={addingMember ? 'confirm-button' : 'button'}
+            <button data-testid="add-person" className={addingMember ? 'confirm-button' : 'button'}
                     id={"squadMemberAddActivate"}
                     onClick={!addingMember ? toggleOnClick : saveOnClick}>
                 {addingMember ?

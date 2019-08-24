@@ -4,10 +4,10 @@ import {Page} from "../components/Page";
 import {AddMember} from "../components/AddMember";
 import {MemberListElement} from "../components/member-list-element/MemberListElement";
 import {money} from "../util/money";
-
-import "./Dashboard.scss";
 import {addContributions, Member} from "../models/Member";
 import {useState} from "react";
+
+import "./Dashboard.scss";
 
 export interface Props {
 }
@@ -22,7 +22,7 @@ export function Dashboard(props: Props){
             newSquad.addSquadMember(member);
         });
         return newSquad;
-    }
+    };
 
     const onMemberSubmit = (member: Member) => {
         const newSquad = deepCopyOfSquad();

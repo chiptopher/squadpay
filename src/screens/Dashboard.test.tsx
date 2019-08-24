@@ -3,6 +3,7 @@ import * as React from "react";
 import {mount} from 'enzyme'
 import {Dashboard} from "./Dashboard";
 import {formatNameToId} from "../models/Member";
+import {findByTestId, fireEvent, render, wait} from "@testing-library/react";
 
 describe('Dashboard', () => {
     function mountScreen() {
@@ -29,6 +30,12 @@ describe('Dashboard', () => {
         return update;
     }
 
+    function addSquadMate2(getByTestId: (i: string) => any, getByPlaceholderText: (i: string) => any, name: string) {
+        fireEvent.click(getByTestId('add-person'));
+        fireEvent.change(getByPlaceholderText('Squad Member'), {target: {value: name}});
+        fireEvent.click(getByTestId('add-person'));
+    }
+
     function addContributionToSquadMateWithName(subject: any, name: string, contributionName: string, contributionAmount: number) {
         const formattedName = formatNameToId(name);
         subject.find(`#${formattedName}-contribution`).simulate('click');
@@ -39,25 +46,37 @@ describe('Dashboard', () => {
     }
 
     describe('Adding a squad member', () => {
-        it('should display them in the squad list', () => {
-            const subject = addSquadMate(mountScreen(), 'Squad Mate 1');
-            expect(subject.text()).toContain('Squad Mate 1');
+        test('should display them in squad list', async () => {
+            const {getByTestId, getByText, getByPlaceholderText} = render(<Dashboard/>);
+            fireEvent.click(getByTestId('add-person'));
+            fireEvent.change(getByPlaceholderText('Squad Member'), {target: {value: 'Squad Mate 1'}});
+            fireEvent.click(getByTestId('add-person'));
+            await wait(() => {
+                expect(getByText('Squad Mate 1'));
+            });
         });
-        it("adding a member should hide the input", () => {
-            const subject = addSquadMate(mountScreen(), 'Squad Mate 1');
-            expect(subject.find("#squadMemberAddName")).toHaveLength(0);
+        test('submitting should hide the input', async () => {
+            const {getByTestId, getByPlaceholderText, queryByPlaceholderText} = render(<Dashboard/>);
+            fireEvent.click(getByTestId('add-person'));
+            fireEvent.change(getByPlaceholderText('Squad Member'), {target: {value: 'Squad Mate 1'}});
+            fireEvent.click(getByTestId('add-person'));
+            await wait(() => {
+                expect(queryByPlaceholderText('Squad Member')).toBeNull();
+            });
         });
     });
 
     describe('Adding an expense to a user', () => {
-        it('should increase the overall cost of the trip', () => {
-            const subject = addSquadMate(mountScreen(), 'Squad Mate 1');
-            subject.find('#squad-mate-1-contribution').simulate('click');
-            subject.find('#squad-mate-1-contribution-input').find('input').simulate('change', {target: {value: 1.0}});
-            subject.find('#squad-mate-1-contribution-submit').simulate('click');
-            subject.update();
-            subject.update();
-            expect(subject.html()).toContain('Total Cost $1.00');
+        test('should increase the overall cost of the trip', async () => {
+            const {getByText, getByTestId, getByPlaceholderText} = render(<Dashboard/>);
+            addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 1');
+            fireEvent.click(getByText('Squad Mate 1'));
+            fireEvent.click(getByTestId('add-contribution'));
+            fireEvent.change(getByPlaceholderText('Contribution Amount'), {target: {value: 1.0}});
+            fireEvent.click(getByTestId('submit'))
+            await wait(() => {
+                getByText('Total Cost $1.00');
+            });
         });
     });
     describe('toggling a user', () => {

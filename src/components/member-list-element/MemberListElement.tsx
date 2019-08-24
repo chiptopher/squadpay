@@ -68,7 +68,7 @@ export function MemberListElement(props: Props) {
                     <div className={'member-name-and-button'}>
                         <span className={'name-text'}>{props.member.name}</span>
                         <div className={'button-container'}>
-                            <button id={createContributionId(props.member)}
+                            <button data-testid="add-contribution" id={createContributionId(props.member)}
                                     className={'button-small'}
                                     onClick={toggleModal}>
                                 <FontAwesomeIcon icon={faPlus}/>
