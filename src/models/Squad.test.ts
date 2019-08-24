@@ -9,7 +9,7 @@ function createMember(name: string, contribution: number): Member {
 describe("Member", () => {
     describe("addMember", () => {
         it("should add the member to the squad", () => {
-            const member = new Member('name', [new Contribution('name', 100.0)]);
+            const member = new Member('squadMemberName', [new Contribution('squadMemberName', 100.0)]);
             const squad = new Squad();
             squad.addSquadMember(member);
             expect(squad.squadMembers).toContain(member);
@@ -18,8 +18,8 @@ describe("Member", () => {
 
     describe('otherSquadMembers', () => {
         it('should return the squad members in the squad that arent the given one', () => {
-            const member1 = new Member('name1', [new Contribution('name', 0.0)]);
-            const member2 = new Member('name2', [new Contribution('name', 0.0)]);
+            const member1 = new Member('name1', [new Contribution('squadMemberName', 0.0)]);
+            const member2 = new Member('name2', [new Contribution('squadMemberName', 0.0)]);
             const squad = new Squad();
             squad.addSquadMember(member1);
             squad.addSquadMember(member2);

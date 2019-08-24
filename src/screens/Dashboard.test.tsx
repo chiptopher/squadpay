@@ -2,8 +2,8 @@ import * as React from "react";
 
 import {mount} from 'enzyme'
 import {Dashboard} from "./Dashboard";
-import {formatNameToId} from "../models/Member";
-import {findByTestId, fireEvent, render, wait} from "@testing-library/react";
+import {formatMemberToId, formatNameToId} from "../models/Member";
+import {fireEvent, render, wait} from "@testing-library/react";
 
 describe('Dashboard', () => {
     function mountScreen() {
@@ -36,10 +36,24 @@ describe('Dashboard', () => {
         fireEvent.click(getByTestId('add-person'));
     }
 
+    function addContributionToSquadMateWithName2(config: {
+        getByTestId: (i: string) => any,
+        getByPlaceholderText: (i: string) => any,
+        getByText: (i: string) => any,
+        squadMemberName: string,
+        contributionAmount: number,
+        contributionName: string
+    }) {
+        fireEvent.click(config.getByTestId(formatNameToId(config.squadMemberName) + '-add-contribution'));
+        fireEvent.change(config.getByPlaceholderText('32.50'), {target: {value: config.contributionAmount}});
+        fireEvent.change(config.getByPlaceholderText('Pizza and Drinks'), {target: {value: config.contributionName}});
+        fireEvent.click(config.getByTestId('submit'));
+    }
+
     function addContributionToSquadMateWithName(subject: any, name: string, contributionName: string, contributionAmount: number) {
         const formattedName = formatNameToId(name);
         subject.find(`#${formattedName}-contribution`).simulate('click');
-        subject.find(`#${formattedName}-contribution-name-input`).find('input').simulate('change', {target: {value:contributionName}});
+        subject.find(`#${formattedName}-contribution-name-input`).find('input').simulate('change', {target: {value: contributionName}});
         subject.find(`#${formattedName}-contribution-input`).find('input').simulate('change', {target: {value: contributionAmount}});
         subject.find(`#${formattedName}-contribution-submit`).simulate('click');
         return subject.update();
@@ -71,24 +85,41 @@ describe('Dashboard', () => {
             const {getByText, getByTestId, getByPlaceholderText} = render(<Dashboard/>);
             addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 1');
             fireEvent.click(getByText('Squad Mate 1'));
-            fireEvent.click(getByTestId('add-contribution'));
-            fireEvent.change(getByPlaceholderText('Contribution Amount'), {target: {value: 1.0}});
-            fireEvent.click(getByTestId('submit'))
+            fireEvent.click(getByTestId('squad-mate-1-add-contribution'));
+            fireEvent.change(getByPlaceholderText('32.50'), {target: {value: 1.0}});
+            fireEvent.click(getByTestId('submit'));
             await wait(() => {
                 getByText('Total Cost $1.00');
             });
         });
     });
     describe('toggling a user', () => {
-        it('should show the contribution under the squad member', () => {
-            const subject = addSquadMate(mountScreen(), 'Squad Mate 1');
-            subject.find('#squad-mate-1-contribution').simulate('click');
-            subject.find('#squad-mate-1-contribution-name-input').find('input').simulate('change', {target: {value: 'Name'}});
-            subject.find('#squad-mate-1-contribution-input').find('input').simulate('change', {target: {value: 1.0}});
-            subject.find('#squad-mate-1-contribution-submit').simulate('click');
-            subject.find('#squad-mate-1').simulate('click');
-            subject.update();
-            expect(subject.html()).toContain('Name $1.00')
+        test('should increase the overall cost of the trip', async () => {
+            const {getByText, getByTestId, getByPlaceholderText} = render(<Dashboard/>);
+            addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 1');
+            fireEvent.click(getByText('Squad Mate 1'));
+            fireEvent.click(getByTestId('squad-mate-1-add-contribution'));
+            fireEvent.change(getByPlaceholderText('32.50'), {target: {value: 1.0}});
+            fireEvent.click(getByTestId('submit'));
+            await wait(() => {
+                getByText('Total Cost $1.00');
+            });
+        });
+        test('should show the contribution under the squad member', async () => {
+            const {getByText, getByTestId, getByPlaceholderText} = render(<Dashboard/>);
+            addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 1');
+            addContributionToSquadMateWithName2({
+                getByTestId,
+                getByPlaceholderText,
+                getByText,
+                squadMemberName: 'Squad Mate 1',
+                contributionName: 'Name',
+                contributionAmount: 1.0
+            });
+            fireEvent.click(getByText('Squad Mate 1'));
+            await wait(() => {
+                getByText('Name $1.00');
+            });
         });
         it('it should give the option to view how much is owed from other people', () => {
             let subject = addSquadMate(mountScreen(), 'Squad Mate 1');

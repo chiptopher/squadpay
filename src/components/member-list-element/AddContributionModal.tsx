@@ -18,13 +18,14 @@ export const AddContributionModal: React.FunctionComponent<Props> = (props) => {
         <div>
             <InputWithLabel label={'Contribution Name'}
                             id={createContributionId(props.member) + '-name-input'}
+                            placeholder={'Pizza and Drinks'}
                             onChange={(event: any) => {
                                 setContributionName(event.target.value);
                             }}/>
             <InputWithLabel id={createContributionId(props.member) + '-input'}
                             label={'Contribution Amount'}
                             type={'number'}
-                            placeholder={'Contribution Amount'}
+                            placeholder={'32.50'}
                             onChange={(event: any) => {
                                 setContributionAmount(Number(event.target.value));
                             }}/>
