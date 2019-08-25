@@ -3,7 +3,7 @@ import * as React from "react";
 import {mount} from 'enzyme'
 import {Dashboard} from "./Dashboard";
 import {formatMemberToId, formatNameToId} from "../models/Member";
-import {fireEvent, render, wait} from "@testing-library/react";
+import {findByText, fireEvent, render, wait} from "@testing-library/react";
 
 describe('Dashboard', () => {
     function mountScreen() {
@@ -121,44 +121,109 @@ describe('Dashboard', () => {
                 getByText('Name $1.00');
             });
         });
-        it('it should give the option to view how much is owed from other people', () => {
-            let subject = addSquadMate(mountScreen(), 'Squad Mate 1');
-            subject = addSquadMate(subject, 'Squad Mate 2');
-            addContributionToSquadMateWithName(subject, 'Squad Mate 1', 'name1', 10.0);
-            addContributionToSquadMateWithName(subject, 'Squad Mate 2', 'name2', 8.0);
-            subject.find('#squad-mate-1').simulate('click');
-            expect(subject.html()).toContain('Payments')
+        test('it should give the option to view how much is owed from other people', async () => {
+            const {getByText, getByTestId, getByPlaceholderText} = render(<Dashboard/>);
+            addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 1');
+            addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 2');
+            addContributionToSquadMateWithName2({
+                getByTestId,
+                getByPlaceholderText,
+                getByText,
+                squadMemberName: 'Squad Mate 1',
+                contributionName: 'name1',
+                contributionAmount: 10.0
+            });
+            addContributionToSquadMateWithName2({
+                getByTestId,
+                getByPlaceholderText,
+                getByText,
+                squadMemberName: 'Squad Mate 2',
+                contributionName: 'name2',
+                contributionAmount: 8.0
+            });
+            fireEvent.click(getByText('Squad Mate 1'));
+            await wait(() => {
+                expect(getByText('Payments'));
+            });
         });
         describe('selecting payments', () => {
-            it('should list the other squad members', () => {
-                let subject = addSquadMate(mountScreen(), 'Squad Mate 1');
-                subject = addSquadMate(subject, 'Squad Mate 2');
-                addContributionToSquadMateWithName(subject, 'Squad Mate 1', 'name1', 10.0);
-                addContributionToSquadMateWithName(subject, 'Squad Mate 2', 'name2', 8.0);
-                subject.find('#squad-mate-1').simulate('click');
-                subject.find('.tab').simulate('click');
-                subject.update();
-                expect(subject.html()).toContain('Owed by Squad Mate 2')
+            test('should list the other squad members', async () => {
+                const {getByText, getByTestId, getByPlaceholderText} = render(<Dashboard/>);
+                addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 1');
+                addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 2');
+                addContributionToSquadMateWithName2({
+                    getByTestId,
+                    getByPlaceholderText,
+                    getByText,
+                    squadMemberName: 'Squad Mate 1',
+                    contributionName: 'name1',
+                    contributionAmount: 10.0
+                });
+                addContributionToSquadMateWithName2({
+                    getByTestId,
+                    getByPlaceholderText,
+                    getByText,
+                    squadMemberName: 'Squad Mate 2',
+                    contributionName: 'name2',
+                    contributionAmount: 8.0
+                });
+                fireEvent.click(getByText('Squad Mate 1'));
+                fireEvent.click(getByText('Payments'));
+                await wait(() => {
+                    expect(getByText('Owed by Squad Mate 2'));
+                });
             });
-            it('should display the amounts owed to and from each member', () => {
-                let subject = addSquadMate(mountScreen(), 'Squad Mate 1');
-                subject = addSquadMate(subject, 'Squad Mate 2');
-                addContributionToSquadMateWithName(subject, 'Squad Mate 1', 'name1', 10.0);
-                addContributionToSquadMateWithName(subject, 'Squad Mate 2', 'name2', 8.0);
-                subject.find('#squad-mate-1').simulate('click');
-                subject.find('.tab').simulate('click');
-                subject.update();
-                expect(subject.html()).toContain('$1.00')
+            test('should display the amounts owed to and from each member', async () => {
+                const {getByText, getByTestId, getByPlaceholderText} = render(<Dashboard/>);
+                addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 1');
+                addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 2');
+                addContributionToSquadMateWithName2({
+                    getByTestId,
+                    getByPlaceholderText,
+                    getByText,
+                    squadMemberName: 'Squad Mate 1',
+                    contributionName: 'name1',
+                    contributionAmount: 10.0
+                });
+                addContributionToSquadMateWithName2({
+                    getByTestId,
+                    getByPlaceholderText,
+                    getByText,
+                    squadMemberName: 'Squad Mate 2',
+                    contributionName: 'name2',
+                    contributionAmount: 8.0
+                });
+                fireEvent.click(getByText('Squad Mate 1'));
+                fireEvent.click(getByText('Payments'));
+                await wait(() => {
+                    expect(getByText('$1.00'));
+                });
             });
-            it("should say 'owed to' if the the member owes money to a person in the list", () => {
-                let subject = addSquadMate(mountScreen(), 'Squad Mate 1');
-                subject = addSquadMate(subject, 'Squad Mate 2');
-                addContributionToSquadMateWithName(subject, 'Squad Mate 1', 'name1', 8.0);
-                addContributionToSquadMateWithName(subject, 'Squad Mate 2', 'name2', 10.0);
-                subject.find('#squad-mate-1').simulate('click');
-                subject.find('.tab').simulate('click');
-                subject.update();
-                expect(subject.html()).toContain('Owed to')
+            test("should say 'owed to' if the the member owes money to a person in the list", async () => {
+                const {getByText, getByTestId, getByPlaceholderText} = render(<Dashboard/>);
+                addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 1');
+                addSquadMate2(getByTestId, getByPlaceholderText, 'Squad Mate 2');
+                addContributionToSquadMateWithName2({
+                    getByTestId,
+                    getByPlaceholderText,
+                    getByText,
+                    squadMemberName: 'Squad Mate 1',
+                    contributionName: 'name1',
+                    contributionAmount: 8.0
+                });
+                addContributionToSquadMateWithName2({
+                    getByTestId,
+                    getByPlaceholderText,
+                    getByText,
+                    squadMemberName: 'Squad Mate 2',
+                    contributionName: 'name2',
+                    contributionAmount: 10.0
+                });
+                fireEvent.click(getByText('Squad Mate 1'));
+                fireEvent.click(getByText('Payments'));
+                await wait(() => {
+                    expect(getByText('Owed to', {exact: false}));
+                });
             });
         })
     })
