@@ -18,6 +18,7 @@ import {ContributionsList} from "./ContributionsList";
 import {TabElement, TabSelector} from "../TabSelector";
 import {formatMemberToId, Member} from "../../models/Member";
 import {PaymentsList} from "./PaymentsList";
+import AnalyticsClient from "../../services/AnalyticsClient";
 
 
 interface Props {
@@ -37,15 +38,22 @@ export function MemberListElement(props: Props) {
     const submitContributionOnClick = (name: string, amount: number) => {
         setShowModal(false);
         props.addContribution(name, amount);
+        AnalyticsClient.event('Add Contribution', 'Submit');
     };
 
     const toggleContributionsList = () => {
+        if (!toggled) {
+            AnalyticsClient.event('Member Info', 'Toggle Squad Member');
+        } else {
+            AnalyticsClient.event('Member Info', 'Untoggle Squad Member');
+        }
         setToggled(!toggled);
     };
 
     const toggleModal = (event: any) => {
         event.stopPropagation();
         setShowModal(true);
+        AnalyticsClient.event('Add Contribution', 'Toggle Modal');
     };
 
     const onChosenTabSelect = (chosenTab: TabElement) => {
@@ -54,8 +62,10 @@ export function MemberListElement(props: Props) {
 
     function displayTab() {
         if (chosenTab.name === CONTRIBUTIONS_TAB.name) {
+            AnalyticsClient.event('Member Info', 'Open Contributions Tab');
             return <ContributionsList member={props.member}/>;
         } else if (chosenTab.name === PAYMENTS_TAB.name) {
+            AnalyticsClient.event('Member Info', 'Open Payments Tab');
             return <PaymentsList squad={props.squad} member={props.member}/>;
         }
     }
@@ -68,7 +78,8 @@ export function MemberListElement(props: Props) {
                     <div className={'member-name-and-button'}>
                         <span className={'name-text'}>{props.member.name}</span>
                         <div className={'button-container'}>
-                            <button data-testid={formatMemberToId(props.member) + "-add-contribution"} id={createContributionId(props.member)}
+                            <button data-testid={formatMemberToId(props.member) + "-add-contribution"}
+                                    id={createContributionId(props.member)}
                                     className={'button-small'}
                                     onClick={toggleModal}>
                                 <FontAwesomeIcon icon={faPlus}/>

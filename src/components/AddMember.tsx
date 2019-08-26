@@ -7,6 +7,7 @@ import {useState} from "react";
 
 import './AddMember.scss';
 import {faUser} from "@fortawesome/free-solid-svg-icons/faUser";
+import AnalyticsClient from "../services/AnalyticsClient";
 
 interface Props {
 
@@ -19,6 +20,7 @@ export function AddMember(props: Props) {
 
     const toggleOnClick = () => {
         setAddingMember(true);
+        AnalyticsClient.event('Add Member', 'Toggle Input');
     };
 
     const saveOnClick = () => {

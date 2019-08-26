@@ -4,6 +4,7 @@ import {useState} from "react";
 import {Modal} from "../Modal";
 import {InputWithLabel} from "../InputWithLabel";
 import {createContributionId} from "./helpers";
+import AnalyticsClient from "../../services/AnalyticsClient";
 
 interface Props {
     onClose: () => void;
@@ -14,6 +15,7 @@ interface Props {
 export const AddContributionModal: React.FunctionComponent<Props> = (props) => {
     const [contributionAmount, setContributionAmount] = useState(0.0);
     const [contributionName, setContributionName] = useState('');
+    AnalyticsClient.modalView('Add Contribution Modal');
     return <Modal onClose={props.onClose}>
         <div>
             <InputWithLabel label={'Contribution Name'}

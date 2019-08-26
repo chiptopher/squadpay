@@ -1,15 +1,14 @@
-jest.mock("react-ga");
+import {create} from "./AnalyticsClient";
+import ReactGA from 'react-ga';
 
-import AnalyticsClient from "./AnalyticsClient";
-import a1 from "./AnalyticsClient";
-import a2 from "./AnalyticsClient";
-import ReactGA from "react-ga";
 
-describe('AnalyticsClient', () => {
+describe('create', () => {
+    let AnalyticsClient: any;
+    beforeEach(() => {
+        jest.clearAllMocks();
+        AnalyticsClient = create({trackingId: 'trackingid'});
+    });
     describe('instantiation', () => {
-        it('there should only be one instance', () => {
-            expect(a1).toBe(a2);
-        });
         it('should only initialize react-ga once', () => {
             expect(ReactGA.initialize).toHaveBeenCalledTimes(1);
         });
@@ -31,5 +30,17 @@ describe('AnalyticsClient', () => {
             AnalyticsClient.pageView('/page');
             expect(ReactGA.pageview).toHaveBeenCalledWith('/page');
         });
+    });
+    describe('when not given a tracking id', () => {
+        it('should not send any analytics events', () => {
+            const client = create({});
+            client.event('name', 'action');
+            expect(ReactGA.event).not.toHaveBeenCalled();
+            client.modalView('name');
+            expect(ReactGA.modalview).not.toHaveBeenCalled();
+            client.pageView('name');
+            expect(ReactGA.pageview).not.toHaveBeenCalled();
+        });
+
     });
 });

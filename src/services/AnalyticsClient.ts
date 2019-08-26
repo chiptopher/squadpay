@@ -2,7 +2,7 @@ import ReactGA from "react-ga";
 
 
 interface AnalyticsConfig {
-    trackingId: string
+    trackingId?: string
 }
 
 interface AnalyticsClientImpl {
@@ -11,21 +11,27 @@ interface AnalyticsClientImpl {
     pageView: (name: string) => void
 }
 
-function create(config: AnalyticsConfig): AnalyticsClientImpl {
-    ReactGA.initialize(config.trackingId);
+export function create(config: AnalyticsConfig): AnalyticsClientImpl {
+    if (config.trackingId) {
+        ReactGA.initialize(config.trackingId);
+    }
+    const modalView = config.trackingId ?
+        (name: string) => ReactGA.modalview(name) :
+        (_: string) => {};
+    const event = config.trackingId ?
+        (groupName: string, action: string) => ReactGA.event({category: groupName, action: action}) :
+        (_: string) => {};
+    const pageView = config.trackingId ?
+        (name: string) => ReactGA.pageview(name) :
+        (_: string) => {};
+
     return {
-        modalView: (name: string) => {
-            ReactGA.modalview(name);
-        },
-        event: (groupName: string, action: string) => {
-            ReactGA.event({category: groupName, action: action});
-        },
-        pageView: (name: string) => {
-            ReactGA.pageview(name);
-        }
+        modalView,
+        event,
+        pageView
     };
 }
 
 export default create({
-    trackingId: ''
+    trackingId: process.env.REACT_APP_ANALYTICS_TRACKING_ID
 });

@@ -7,12 +7,14 @@ import {money} from "../util/money";
 import {addContributions, Member} from "../models/Member";
 import {useState} from "react";
 
+import AnalyticsClient from "../services/AnalyticsClient";
+
 import "./Dashboard.scss";
 
 export interface Props {
 }
 
-export function Dashboard(props: Props){
+export function Dashboard(props: Props) {
 
     const [squad, setSquad] = useState(new Squad());
 
@@ -41,22 +43,24 @@ export function Dashboard(props: Props){
         })
     };
 
-        return <Page>
-            <div className={"Dashboard"}>
-                <div className={"title"}>
-                    <span className={"titleSquad"}>squad</span>
-                    <span className={"titlePay"}>pay</span>
-                </div>
-                <div className={"squadContainer"}>
-                    <div className={'total-cost'}>
-                        <span>Total Cost {money(squad.totalCostOfContributions())}</span>
-                    </div>
-                    <div className={"addMember"}>
-                        <AddMember onMemberSubmit={onMemberSubmit}/>
-                    </div>
-                    <div className={"membersContainer"}>{loadMembers()}</div>
-                </div>
+    AnalyticsClient.pageView('/dashboard');
+
+    return <Page>
+        <div className={"Dashboard"}>
+            <div className={"title"}>
+                <span className={"titleSquad"}>squad</span>
+                <span className={"titlePay"}>pay</span>
             </div>
-        </Page>;
+            <div className={"squadContainer"}>
+                <div className={'total-cost'}>
+                    <span>Total Cost {money(squad.totalCostOfContributions())}</span>
+                </div>
+                <div className={"addMember"}>
+                    <AddMember onMemberSubmit={onMemberSubmit}/>
+                </div>
+                <div className={"membersContainer"}>{loadMembers()}</div>
+            </div>
+        </div>
+    </Page>;
 
 }
