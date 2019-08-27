@@ -6,6 +6,8 @@ import {InputWithLabel} from "../InputWithLabel";
 import {createContributionId} from "./helpers";
 import AnalyticsClient from "../../services/AnalyticsClient";
 
+import "./AddContributionModal.scss";
+
 interface Props {
     onClose: () => void;
     onSubmit: (name: string, amount: number) => void;
@@ -17,20 +19,24 @@ export const AddContributionModal: React.FunctionComponent<Props> = (props) => {
     const [contributionName, setContributionName] = useState('');
     AnalyticsClient.modalView('Add Contribution Modal');
     return <Modal onClose={props.onClose}>
-        <div>
-            <InputWithLabel label={'Contribution Name'}
-                            id={createContributionId(props.member) + '-name-input'}
-                            placeholder={'Pizza and Drinks'}
-                            onChange={(event: any) => {
-                                setContributionName(event.target.value);
-                            }}/>
-            <InputWithLabel id={createContributionId(props.member) + '-input'}
-                            label={'Contribution Amount'}
-                            type={'number'}
-                            placeholder={'32.50'}
-                            onChange={(event: any) => {
-                                setContributionAmount(Number(event.target.value));
-                            }}/>
+        <div className={'add-contribution-modal'}>
+            <div className={'input-container'}>
+                <InputWithLabel label={'Contribution Name'}
+                                id={createContributionId(props.member) + '-name-input'}
+                                placeholder={'Pizza and Drinks'}
+                                onChange={(event: any) => {
+                                    setContributionName(event.target.value);
+                                }}/>
+            </div>
+            <div className={'input-container'}>
+                <InputWithLabel id={createContributionId(props.member) + '-input'}
+                                label={'Contribution Amount'}
+                                type={'number'}
+                                placeholder={'32.50'}
+                                onChange={(event: any) => {
+                                    setContributionAmount(Number(event.target.value));
+                                }}/>
+            </div>
             <button id={createContributionId(props.member) + '-submit'} className={'button-small'}
                     onClick={() => {
                         props.onSubmit(contributionName, contributionAmount)
